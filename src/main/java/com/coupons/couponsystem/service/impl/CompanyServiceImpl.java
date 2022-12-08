@@ -62,20 +62,23 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
     @Override
     public Coupon updateCoupon(Coupon coupon) {
 
-        return couponRepository.findById(coupon.getId()).map(couponEntity -> {
-            couponEntity.setCategory(coupon.getCategory());
-            couponEntity.setTitle(coupon.getTitle());
-            couponEntity.setDescription(coupon.getDescription());
-            couponEntity.setStartDate(coupon.getStartDate());
-            couponEntity.setEndDate(coupon.getEndDate());
-            couponEntity.setAmount(coupon.getAmount());
-            couponEntity.setPrice(coupon.getPrice());
-            couponEntity.setImage(coupon.getImage());
+    // if(coupon.getCompany().getId()==this.companyId) {
+         return couponRepository.findById(coupon.getId()).map(couponEntity -> {
+                     couponEntity.setCategory(coupon.getCategory());
+                     couponEntity.setTitle(coupon.getTitle());
+                     couponEntity.setDescription(coupon.getDescription());
+                     couponEntity.setStartDate(coupon.getStartDate());
+                     couponEntity.setEndDate(coupon.getEndDate());
+                     couponEntity.setAmount(coupon.getAmount());
+                     couponEntity.setPrice(coupon.getPrice());
+                     couponEntity.setImage(coupon.getImage());
 
-            return couponEntity;
-                }
-        ).orElseThrow(() -> new ResourceNotFound("updateCompany", "company id", coupon.getId()));
+                     return couponEntity;
+                 }
+         ).orElseThrow(() -> new ResourceNotFound("updateCompany", "company id", coupon.getId()));
+    // }
 
+   //  throw new CouponSystemException(HttpStatus.BAD_REQUEST,"updateCoupon compant can't have access to this coupon");
     }
 
 
@@ -120,10 +123,10 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
         return couponRepository.findAllByCompany_idAndCategory(this.companyId,category);
     }
 
-//    @Override
-//    public List<Coupon> getAllCompanyCouponsByPrice(int maxPrice) {
-//        return couponRepository.findAllByCompanyIdAndMaxPrice(this.companyId,maxPrice);
-//    }
+    @Override
+    public List<Coupon> getAllCompanyCouponsByPrice(int maxPrice) {
+        return couponRepository.findAllByMaxPriceAndCompany_id(this.companyId,maxPrice);
+    }
 
     @Override
     public Company getCompanyDetails() {

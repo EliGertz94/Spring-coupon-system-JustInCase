@@ -4,9 +4,9 @@ import com.coupons.couponsystem.ClientLogIn.ClientType;
 import com.coupons.couponsystem.ClientLogIn.LoginManager;
 import com.coupons.couponsystem.model.Category;
 import com.coupons.couponsystem.model.Coupon;
+import com.coupons.couponsystem.service.CompanyService;
 import com.coupons.couponsystem.service.CustomerService;
 import com.coupons.couponsystem.service.impl.AdminServiceImpl;
-import com.coupons.couponsystem.service.impl.CompanyServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,14 +31,18 @@ public class CouponSystemApplication {
 		//LoginManager loginManager2 = LoginManager.getInstance();
 		logger.info("login objects -  {} {}",loginManager,loginManager2);
 
-		CompanyServiceImpl company = (CompanyServiceImpl)
+		CompanyService company = (CompanyService)
 				loginManager.logIn("bbb@gmail.com", "bbbbdbfd", ClientType.Company);
 
-		company.addCoupon(new Coupon(0L,null,Category.Restaurant,"new first coupon","description",
-						LocalDateTime.now(),LocalDateTime.of(2022, 11, 11, 12, 12)
-						,150,120,"image"));
+//		company.addCoupon(new Coupon(0L,null,Category.Restaurant,"new first coupon","description",
+//						LocalDateTime.now(),LocalDateTime.of(2022, 11, 11, 12, 12)
+//						,150,120,"image"));
 
-		//company.up
+		company.updateCoupon(new Coupon(2L,null,Category.Restaurant,"new first coupon","description",
+				LocalDateTime.now(),LocalDateTime.of(2022, 11, 11, 12, 12)
+				,150,120,"image"));
+
+		company.deleteCoupon(3L);
 
 
 
@@ -48,6 +52,8 @@ public class CouponSystemApplication {
 		printList(coupons);
 		System.out.println("coupons by category ");
 		printList(couponsByCategory);
+
+		List<Coupon> byPrice= company.getAllCompanyCouponsByPrice(102);
 
 
 

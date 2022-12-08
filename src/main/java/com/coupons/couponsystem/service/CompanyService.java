@@ -20,7 +20,7 @@ public interface CompanyService {
 
     List<Coupon> getAllCompanyCouponsByCategory(Category category);
 
-  //  List<Coupon> getAllCompanyCouponsByPrice(int maxPrice);
+    List<Coupon> getAllCompanyCouponsByPrice(int maxPrice);
 
     Company getCompanyDetails();
 
