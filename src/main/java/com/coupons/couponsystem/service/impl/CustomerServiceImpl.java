@@ -28,10 +28,6 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
     private CouponRepository couponRepository;
 
 
-//    public CustomerServiceImpl(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository) {
-//        super(companyRepository, customerRepository, couponRepository);
-//    }
-
     @Override
     public boolean logIn(String email,String password){
 
@@ -66,11 +62,14 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
     //do I need to do it with a specific repository query ?
     @Override
     public List<Coupon> getCustomerCoupons() {
-        Customer customer = customerRepository.findById(this.customerId)
-                .orElseThrow(()-> new CouponSystemException(HttpStatus.NOT_FOUND
-                        ," customer not founds by id - customer service"));
+//        Customer customer = customerRepository.findById(this.customerId)
+//                .orElseThrow(()-> new CouponSystemException(HttpStatus.NOT_FOUND
+//                        ," customer not founds by id - customer service"));
+//
+//        return customer.getCoupons();
 
-        return customer.getCoupons();
+        List<Coupon> coupons = customerRepository.findAllByCoupons(this.customerId);
+        return coupons;
 
   //   return    customerRepository.findAllCustomerCoupons(this.customerId);
 

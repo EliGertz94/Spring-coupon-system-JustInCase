@@ -12,9 +12,11 @@ public interface CompanyService {
 
      Coupon addCoupon(Coupon coupon);
 
+    Coupon updateCoupon(Coupon coupon);
+
     void deleteCoupon(long couponId);
 
-    Company getAllCompanyCoupons();
+    List<Coupon> getAllCompanyCoupons();
 
     List<Coupon> getAllCompanyCouponsByCategory(Category category);
 

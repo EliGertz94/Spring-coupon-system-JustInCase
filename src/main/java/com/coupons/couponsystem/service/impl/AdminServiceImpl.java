@@ -27,11 +27,6 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     private CouponRepository couponRepository;
 
 
-//    public AdminServiceImpl(CompanyRepository companyRepository, CustomerRepository customerRepository, CouponRepository couponRepository) {
-//        super(companyRepository, customerRepository, couponRepository);
-//    }
-
-
 
 
 

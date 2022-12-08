@@ -49,13 +49,13 @@ public class CustomerController {
     }
 
     @GetMapping("/coupon/")
-    public ResponseEntity<List<String>> getAllCoupons(){
+    public ResponseEntity<List<Coupon>> getAllCoupons(){
 
       List<Coupon> coupons=customerService.getCustomerCoupons();
         List<String> couponNames=  new ArrayList<>();
               for(Coupon coupon:coupons){
                   couponNames.add(coupon.getTitle());
               }
-        return new ResponseEntity<>(couponNames , HttpStatus.OK);
+        return new ResponseEntity<>(coupons , HttpStatus.OK);
     }
 }

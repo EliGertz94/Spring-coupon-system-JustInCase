@@ -79,7 +79,9 @@ public class CompanyController {
     @GetMapping("/companycoupons/")
     public  ResponseEntity<List<Coupon>> getCompanyCoupons(){
 
-       List<Coupon> coupons=  companyService.getAllCompanyCoupons().getCoupons();
+      // List<Coupon> coupons=  companyService.getAllCompanyCoupons().getCoupons();
+
+       List<Coupon> coupons  = companyService.getAllCompanyCoupons();
 
         List<String> couponsTitle=  new ArrayList<>();
 
@@ -95,9 +97,9 @@ public class CompanyController {
 
         Category categoryByNum = Category.valueOf(category);
 
-        Company company =  companyService.getAllCompanyCoupons();
+        List<Coupon> coupons =  companyService.getAllCompanyCouponsByCategory(categoryByNum);
 
-        List<Coupon> coupons=  companyService.getAllCompanyCouponsByCategory(categoryByNum);
+      //  List<Coupon> coupons=  companyService.getAllCompanyCouponsByCategory(categoryByNum);
 
 
 //        List<String> couponsTitle=  new ArrayList<>();

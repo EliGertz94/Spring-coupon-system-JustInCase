@@ -48,17 +48,47 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
 
     @Override
     public Coupon addCoupon(Coupon coupon) {
+        Company company = companyRepository.findById(this.companyId)
+                .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND,"company not dound " ));
 
-        if(couponRepository.existsByTitle(coupon.getTitle())){
+        if(couponRepository.existsByTitleAndCompanyId(coupon.getTitle(),this.companyId)){
             throw new CouponSystemException(HttpStatus.BAD_REQUEST,"addCoupon title in use already ");
         }
-        Company company = companyRepository.findById(this.companyId)
-        .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND,"company not dound " ));
-
         coupon.setCompany(company);
 
         return  couponRepository.save(coupon);
     }
+
+    @Override
+    public Coupon updateCoupon(Coupon coupon) {
+
+        return couponRepository.findById(coupon.getId()).map(couponEntity -> {
+            couponEntity.setCategory(coupon.getCategory());
+            couponEntity.setTitle(coupon.getTitle());
+            couponEntity.setDescription(coupon.getDescription());
+            couponEntity.setStartDate(coupon.getStartDate());
+            couponEntity.setEndDate(coupon.getEndDate());
+            couponEntity.setAmount(coupon.getAmount());
+            couponEntity.setPrice(coupon.getPrice());
+            couponEntity.setImage(coupon.getImage());
+
+            return couponEntity;
+                }
+        ).orElseThrow(() -> new ResourceNotFound("updateCompany", "company id", coupon.getId()));
+
+    }
+
+
+    //    private Category category;
+    //    private String title;
+    //    private String description;
+    //    private LocalDateTime startDate;
+    //    private LocalDateTime endDate;
+    //    private int amount;
+    //    private double price;
+    //    private String image;
+
+
 
     @Override
     public void deleteCoupon(long couponId) {
@@ -72,16 +102,12 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
 
     /// why am  I getting stackoverflow??!?!?!?!?
     @Override
-    public Company getAllCompanyCoupons() {
-        Company company = companyRepository.findFullCompany(this.companyId)
-                .orElseThrow(() -> new ResourceNotFound("deleteCoupon", "coupon id", this.companyId));
-//couponRepository.findAllByCompanyId(this.companyId);
-//        List<String> couponsNames= new ArrayList<>();
-//        for(Coupon coupon:coupons ){
-//            couponsNames.add(coupon.getTitle());
-//        }
-
-         return company;
+    public List<Coupon> getAllCompanyCoupons() {
+//        Company company = companyRepository.findFullCompany(this.companyId)
+//                .orElseThrow(() -> new ResourceNotFound("deleteCoupon", "coupon id", this.companyId));
+            List<Coupon> coupons = couponRepository.findAllByCompany_id(this.companyId);
+        System.out.println("coupons"+ coupons +" " + coupons.get(0).getTitle());
+         return coupons;
     }
 
     @Override
@@ -91,7 +117,7 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
 //                .orElseThrow(() -> new ResourceNotFound("deleteCoupon", "coupon id", this.companyId));
 
    //     return company.getCoupons().stream().
-        return couponRepository.findAllByCompanyIdAndCategory(this.companyId,category);
+        return couponRepository.findAllByCompany_idAndCategory(this.companyId,category);
     }
 
 //    @Override

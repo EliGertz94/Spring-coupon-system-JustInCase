@@ -8,18 +8,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CouponRepository extends JpaRepository<Coupon,Long> {
-    boolean existsByTitle(String title);
+    boolean existsByTitleAndCompanyId(String title,long companyId);
 
+    List<Coupon> findAllByCompany_id(long company_id);
 
     List<Coupon> findAllByCompanyId(long id);
 
-    List<Coupon> findAllByCompanyIdAndCategory(long CompanyId,Category category);
-    //List<Coupon> findAllByCompanyIdAndMaxPrice(int maxPrice);
+    List<Coupon> findAllByCompany_idAndCategory(long CompanyId,Category category);
 
-//    @Query(value = "SELECT * FROM coupon WHERE price < :maxPrice",
-//            nativeQuery = true)
-//    List<Coupon> findAllByCompanyIdAndMaxPrice(long id,int maxPrice);
-//
-        long deleteAllByEndDateBefore(LocalDateTime endDate);
+    long deleteAllByEndDateBefore(LocalDateTime endDate);
 }
 
