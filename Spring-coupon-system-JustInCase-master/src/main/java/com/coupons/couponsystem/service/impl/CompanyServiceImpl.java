@@ -76,15 +76,18 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
 
     @Override
     public void deleteCoupon(long couponId) {
-        Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new ResourceNotFound("deleteCoupon", "coupon id", couponId));
 
-         couponRepository.delete(coupon);
+            Coupon coupon = couponRepository.findById(couponId)
+                    .orElseThrow(() -> new ResourceNotFound("deleteCoupon", "coupon id", couponId));
+            if(coupon.getCompany().getId()!= this.companyId){
+                throw new CouponSystemException(HttpStatus.BAD_REQUEST,"deleteCoupon can't delete this coupon ");
+            }
+            couponRepository.delete(coupon);
 
     }
 
 
-    /// why am  I getting stackoverflow??!?!?!?!?
+
     @Override
     public List<Coupon> getAllCompanyCoupons() {
 //        Company company = companyRepository.findFullCompany(this.companyId)
@@ -112,7 +115,10 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
 
     @Override
     public Company getCompanyDetails() {
-        return null;
+       return companyRepository.findFullCompany(this.companyId)
+               .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND,"getCompanyDetails" ));
+
+
     }
 
 

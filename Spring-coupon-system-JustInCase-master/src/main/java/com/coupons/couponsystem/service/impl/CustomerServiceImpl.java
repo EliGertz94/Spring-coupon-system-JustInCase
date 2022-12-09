@@ -44,6 +44,8 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
                         ," customer not founds by id - customer service"));
 
         customer.getCoupons().add(coupon);
+
+        coupon.setAmount(coupon.getAmount()-1);
     }
 
 
@@ -57,7 +59,7 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
 //
 //        return customer.getCoupons();
 
-        List<Coupon> coupons = customerRepository.findAllByCoupons(this.customerId);
+        List<Coupon> coupons = couponRepository.
         return coupons;
 
   //   return    customerRepository.findAllCustomerCoupons(this.customerId);

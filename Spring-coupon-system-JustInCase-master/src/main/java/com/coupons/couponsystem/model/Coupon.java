@@ -36,4 +36,6 @@ public class Coupon {
     private double price;
     private String image;
 
+
+
 }

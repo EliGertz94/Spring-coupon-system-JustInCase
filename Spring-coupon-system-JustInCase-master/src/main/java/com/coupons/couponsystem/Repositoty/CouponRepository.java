@@ -15,10 +15,13 @@ public interface CouponRepository extends JpaRepository<Coupon,Long> {
 
     List<Coupon> findAllByCompanyId(long id);
 
+    List<Coupon> findAllBy
     List<Coupon> findAllByCompany_idAndCategory(long CompanyId,Category category);
     //LessThanEqual
     List<Coupon> findAllByCompany_idAndPriceLessThanEqual(long CompanyId,double price);
 
     long deleteAllByEndDateBefore(LocalDateTime endDate);
+
+
 }
 
