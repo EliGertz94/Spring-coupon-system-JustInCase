@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -36,6 +37,12 @@ public class Coupon {
     private double price;
     private String image;
 
-
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = CascadeType.DETACH)
+    @JoinTable(name = "customer_coupons",
+            joinColumns = @JoinColumn(name = "coupon_id" ,referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"))
+    @ToString.Exclude
+    private List<Customer> customers;
 
 }

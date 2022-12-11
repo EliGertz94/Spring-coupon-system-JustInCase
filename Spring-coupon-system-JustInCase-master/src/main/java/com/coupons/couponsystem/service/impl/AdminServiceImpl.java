@@ -1,14 +1,10 @@
 package com.coupons.couponsystem.service.impl;
 
-import com.coupons.couponsystem.Repositoty.CompanyRepository;
-import com.coupons.couponsystem.Repositoty.CouponRepository;
-import com.coupons.couponsystem.Repositoty.CustomerRepository;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.exception.ResourceNotFound;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
 import com.coupons.couponsystem.service.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,7 +103,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     public void deleteCustomer(long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFound("deleteCustomer", "customer id", id));
-
+        System.out.println(customer);
         customerRepository.delete(customer);
     }
 

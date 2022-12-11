@@ -23,7 +23,7 @@ public class Customer {
     private String email;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.DETACH)
     @JoinTable(name = "customer_coupons",
             joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "coupon_id" ,referencedColumnName = "id"))
