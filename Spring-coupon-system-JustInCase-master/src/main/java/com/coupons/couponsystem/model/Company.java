@@ -25,6 +25,6 @@ public class Company {
     private String password;
     @ToString.Exclude
     @JsonIgnore
-    @OneToMany(mappedBy = "company",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "company",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Coupon> coupons ;
 }

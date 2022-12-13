@@ -29,7 +29,8 @@ public interface CouponRepository extends JpaRepository<Coupon,Long> {
 
     List<Coupon> findAllByCustomers_idAndPriceLessThanEqual(long customer_id,double price);
 
-    long deleteAllByEndDateBefore(LocalDateTime endDate);
+   // long deleteAllByEndDateBefore(LocalDateTime endDate);
+    void deleteByEndDateBefore(LocalDateTime endDate);
 
 
 }

@@ -3,8 +3,6 @@ package com.coupons.couponsystem.job;
 import com.coupons.couponsystem.Repositoty.CouponRepository;
 import com.coupons.couponsystem.exception.CouponSystemException;
 
-import java.time.LocalDateTime;
-
 //@Component
 public class CouponExpirationDailyJob extends Thread {
 
@@ -25,7 +23,7 @@ public class CouponExpirationDailyJob extends Thread {
 
         while (quit) {
             try {
-                couponRepository.deleteAllByEndDateBefore(LocalDateTime.now());
+              //  couponRepository.deleteAllByEndDateBefore(LocalDateTime.now());
                 Thread.sleep(43_200_000); // 12 hours
             } catch (InterruptedException e) {
                 System.out.println("Thread was interrupted");
