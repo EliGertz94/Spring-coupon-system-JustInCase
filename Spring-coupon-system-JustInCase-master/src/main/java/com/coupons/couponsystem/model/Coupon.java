@@ -1,6 +1,7 @@
 package com.coupons.couponsystem.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,10 +25,10 @@ public class Coupon {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", referencedColumnName = "id",nullable = false)
     @ToString.Exclude
+    @JsonIgnore
     private Company company;
     @Enumerated(EnumType.ORDINAL)
     @Column(name="category")
-  //  @ToString.Exclude
     private Category category;
     private String title;
     private String description;
@@ -43,6 +44,7 @@ public class Coupon {
             joinColumns = @JoinColumn(name = "coupon_id" ,referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"))
     @ToString.Exclude
+    @JsonIgnore
     private List<Customer> customers;
 
 }

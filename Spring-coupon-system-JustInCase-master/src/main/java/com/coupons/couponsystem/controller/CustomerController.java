@@ -2,44 +2,25 @@ package com.coupons.couponsystem.controller;
 
 
 import com.coupons.couponsystem.DOT.LogInDOT;
-import com.coupons.couponsystem.exception.CouponSystemException;
+import com.coupons.couponsystem.model.Category;
 import com.coupons.couponsystem.model.Coupon;
 import com.coupons.couponsystem.model.Customer;
-import com.coupons.couponsystem.service.AdminService;
-import com.coupons.couponsystem.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/customer/")
-public class CustomerController {
+public class CustomerController extends ClientController {
 
-    @Autowired
-    AdminService adminService;
-
-    @Autowired
-    CustomerService customerService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> logIn(@RequestBody LogInDOT logInDOT){
-        try{
-            String messege =  customerService.logIn(logInDOT.getEmail(),logInDOT.getPassword())+" ";
-            return new ResponseEntity<>(messege,HttpStatus.OK);
-        }catch(CouponSystemException e) {
-            throw new ResponseStatusException(e.getStatus(),e.getMessage(),e);
-        }
-    }
+    public boolean logIn(@RequestBody LogInDOT logInDOT){
 
+        return customerService.logIn(logInDOT.getEmail(),logInDOT.getPassword());
 
-    @PostMapping()
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer){
-        return new ResponseEntity<>(adminService.addCustomer(customer), HttpStatus.OK);
     }
 
     @PostMapping("/coupon/{couponId}")
@@ -48,14 +29,24 @@ public class CustomerController {
         return new ResponseEntity<>("coupon id "+couponId+ "  was purchased ", HttpStatus.OK);
     }
 
-    @GetMapping("/coupon/")
-    public ResponseEntity<List<Coupon>> getAllCoupons(){
-
-      List<Coupon> coupons=customerService.getCustomerCoupons();
-        List<String> couponNames=  new ArrayList<>();
-              for(Coupon coupon:coupons){
-                  couponNames.add(coupon.getTitle());
-              }
-        return new ResponseEntity<>(coupons , HttpStatus.OK);
+    @GetMapping("/coupons")
+    public ResponseEntity<List<Coupon>> getCustomerCoupons(){
+        return new ResponseEntity<>(customerService.getCustomerCoupons(),HttpStatus.OK);
     }
+
+    @GetMapping("/coupons/{category}")
+    public ResponseEntity<List<Coupon>> getCustomerCoupons(@PathVariable Category category){
+        return new ResponseEntity<>(customerService.getCustomerCoupons(category),HttpStatus.OK);
+    }
+
+    @GetMapping("/coupons/{maxPrice}")
+    public ResponseEntity<List<Coupon>> getCustomerCoupons(@PathVariable double maxPrice){
+        return new ResponseEntity<>(customerService.getCustomerCoupons(maxPrice),HttpStatus.OK);
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<Customer> getCustomerDetails(){
+        return  new ResponseEntity<>(customerService.getCustomerDetails(),HttpStatus.OK);
+    }
+
 }

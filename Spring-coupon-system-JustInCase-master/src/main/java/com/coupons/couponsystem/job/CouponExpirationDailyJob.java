@@ -1,52 +1,29 @@
 package com.coupons.couponsystem.job;
 
+import com.coupons.couponsystem.CouponSystemApplication;
 import com.coupons.couponsystem.Repositoty.CouponRepository;
-import com.coupons.couponsystem.exception.CouponSystemException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 //@Component
-public class CouponExpirationDailyJob extends Thread {
+public class CouponExpirationDailyJob {
 
-    private CouponRepository couponRepository;
-    private Thread thread = new Thread(this,"daily job");
+    public  Logger logger = LoggerFactory.getLogger(CouponSystemApplication.class);
 
-    private boolean quit = true;
+   @Autowired
+   CouponRepository couponRepository;
 
-
-    private static CouponExpirationDailyJob instance;
-
-    private CouponExpirationDailyJob()
-    {
-        instance= new CouponExpirationDailyJob();
-    }
-    @Override
-    public void run() {
-
-        while (quit) {
-            try {
-              //  couponRepository.deleteAllByEndDateBefore(LocalDateTime.now());
-                Thread.sleep(43_200_000); // 12 hours
-            } catch (InterruptedException e) {
-                System.out.println("Thread was interrupted");
-                break;
-            } catch (CouponSystemException e) {
-                System.out.println("Thread error , please check thread again !");
-            }
+       @Scheduled(fixedRate = 10_000)
+       @Transactional
+        public void dailyJob() {
+            couponRepository.deleteByEndDateBefore(LocalDateTime.now());
+           logger.info("was looking for coupons to delete ");
         }
-        System.out.println("job stoped");
-    }
-
-    public void stopJob(){
-        quit = false;
-        Thread.interrupted();
-
-    }
-
-    public void startJob(){
-        thread.start();
-        System.out.println("job started");
-    }
-
-    public Thread getThread() {
-        return thread;
-    }
 }
+
+

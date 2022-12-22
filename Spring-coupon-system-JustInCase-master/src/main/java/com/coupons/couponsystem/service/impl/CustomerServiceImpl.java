@@ -41,8 +41,9 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
     @Override
     public void purchaseCoupon(long couponId) {
         logger.info("exist or not ?  {} ",couponRepository.existsByCustomers_idAndId(this.customerId,couponId));
-        if(!couponRepository.existsByCustomers_idAndId(this.customerId,couponId)) {
-
+        if(couponRepository.existsByCustomers_idAndId(this.customerId,couponId)) {
+        throw new CouponSystemException(HttpStatus.BAD_REQUEST,"purchaseCoupon purchase already exist");
+        }
             Customer customer = customerRepository.findById(this.customerId)
                     .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND
                             , " customer not founds by id - customer service"));
@@ -54,9 +55,7 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
             customer.getCoupons().add(coupon);
 
             coupon.setAmount(coupon.getAmount() - 1);
-            return;
-        }
-        throw new CouponSystemException(HttpStatus.BAD_REQUEST,"purchaseCoupon purchase already exist");
+
     }
 
 
@@ -64,13 +63,10 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
     //do I need to do it with a specific repository query ?
     @Override
     public List<Coupon> getCustomerCoupons() {
-//        Customer customer = customerRepository.findById(this.customerId)
-//                .orElseThrow(()-> new CouponSystemException(HttpStatus.NOT_FOUND
-//                        ," customer not founds by id - customer service"));
-//
-//        return customer.getCoupons();
 
         List<Coupon> coupons = couponRepository.findAllByCustomers_id(this.customerId);
+        coupons.forEach(c->logger.info(" coupon {}",c) );
+
         return coupons;
 
   //   return    customerRepository.findAllCustomerCoupons(this.customerId);

@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Scope // change to prototype
 public class LoginManager {
 
-//    @Autowired
-//    ApplicationContext ctx= SpringApplication.run(CouponSystemApplication.class);
 
         @Autowired
         AdminServiceImpl adminService;

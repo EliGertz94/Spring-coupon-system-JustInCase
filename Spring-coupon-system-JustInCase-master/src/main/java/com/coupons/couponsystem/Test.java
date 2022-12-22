@@ -53,13 +53,13 @@ public class Test implements CommandLineRunner {
 
         List<Coupon> couponsByCategory = company.getAllCompanyCouponsByCategory(Category.Restaurant);
         Coupon couponEntitty1 = new Coupon(0L,null,Category.FOOD,"food lalla coupon","description",
-                LocalDateTime.now(), LocalDateTime.of(2022, 11, 11, 12, 12),150,80,"image",null);
+                LocalDateTime.now(), LocalDateTime.of(2023, 11, 11, 12, 12),150,80,"image",null);
         Coupon couponEntitty2 = new Coupon(0L,null,Category.FOOD,"food second coupon","description",
                 LocalDateTime.now(), LocalDateTime.of(2022, 11, 11, 12, 12),150,50,"image",null);
         Coupon couponEntitty3 = new Coupon(0L,null,Category.Restaurant,"food Restaurant coupon","description",
                 LocalDateTime.now(), LocalDateTime.of(2022, 11, 11, 12, 12),150,100,"image",null);
 
-      // company.addCoupon(couponEntitty3);
+       //company.addCoupon(couponEntitty1);
 //        company.addCoupon(couponEntitty2);
 //        company .addCoupon(couponEntitty3);
         List<Coupon> couponsByPrice = company.getAllCompanyCouponsByPrice(70);

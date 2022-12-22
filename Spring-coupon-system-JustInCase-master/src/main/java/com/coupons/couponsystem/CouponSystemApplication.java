@@ -6,6 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootApplication
 @EnableScheduling
 public class CouponSystemApplication {
@@ -14,7 +18,16 @@ public class CouponSystemApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(CouponSystemApplication.class);
-//
+
+		String list = "avi,yona ,yuval,anton,yakir";
+
+		List<String> names =new  ArrayList<>(Arrays.stream(
+				list.split(",")).map((e)->e.replaceAll("\\s","")).toList());
+
+	names.forEach(System.out::println);
+
+
+		//
 //		LoginManager loginManager = LoginManager.getInstance();
 //
 //		AdminService admin = (AdminService) loginManager.logIn

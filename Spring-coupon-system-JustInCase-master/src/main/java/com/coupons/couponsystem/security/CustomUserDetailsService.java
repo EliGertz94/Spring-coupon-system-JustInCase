@@ -1,7 +1,14 @@
 package com.coupons.couponsystem.security;
 
+//@Configuration
+public class CustomUserDetailsService {
 
-public class CustomUserDetailsService {//implements UserDetailsService {
+//    @Bean
+//    public UserDetailsService userDetailService(){
+//
+//    }
+
+    //implements UserDetailsService {
 //
 //    private UserRepository userRepository;
 //

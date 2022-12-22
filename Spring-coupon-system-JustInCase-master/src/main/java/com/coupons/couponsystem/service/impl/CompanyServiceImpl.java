@@ -6,6 +6,8 @@ import com.coupons.couponsystem.model.Category;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Coupon;
 import com.coupons.couponsystem.service.CompanyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +18,9 @@ import java.util.List;
 public class CompanyServiceImpl extends ClientFacade  implements CompanyService {
 
 
+  private long companyId;
 
-    private long companyId;
-
+    Logger logger= LoggerFactory.getLogger(CompanyServiceImpl.class);
 
 
     @Override
@@ -40,8 +42,11 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
     public Coupon addCoupon(Coupon coupon) {
         Company company = companyRepository.findById(this.companyId)
                 .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND,"company not dound " ));
+        logger.debug("coupon check statment {}"
+                ,couponRepository.existsByTitleAndCompanyId(coupon.getTitle(),this.companyId) );
 
         if(couponRepository.existsByTitleAndCompanyId(coupon.getTitle(),this.companyId)){
+
             throw new CouponSystemException(HttpStatus.BAD_REQUEST,"addCoupon title in use already ");
         }
         coupon.setCompany(company);
@@ -90,25 +95,19 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
 
     @Override
     public List<Coupon> getAllCompanyCoupons() {
-//        Company company = companyRepository.findFullCompany(this.companyId)
-//                .orElseThrow(() -> new ResourceNotFound("deleteCoupon", "coupon id", this.companyId));
-            List<Coupon> coupons = couponRepository.findAllByCompany_id(this.companyId);
+
+        List<Coupon> coupons = couponRepository.findAllByCompany_id(this.companyId);
         System.out.println("coupons"+ coupons +" " + coupons.get(0).getTitle());
          return coupons;
     }
 
     @Override
     public List<Coupon> getAllCompanyCouponsByCategory(Category category) {
-
-//        Company company = companyRepository.findFullCompany(this.companyId)
-//                .orElseThrow(() -> new ResourceNotFound("deleteCoupon", "coupon id", this.companyId));
-
-   //     return company.getCoupons().stream().
         return couponRepository.findAllByCompany_idAndCategory(this.companyId,category);
     }
 
     @Override
-    public List<Coupon> getAllCompanyCouponsByPrice(int maxPrice) {
+    public List<Coupon> getAllCompanyCouponsByPrice(double maxPrice) {
 
        return couponRepository.findAllByCompany_idAndPriceLessThanEqual(this.companyId,maxPrice);
     }
