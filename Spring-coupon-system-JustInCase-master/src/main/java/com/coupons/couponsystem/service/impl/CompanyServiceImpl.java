@@ -97,7 +97,6 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
     public List<Coupon> getAllCompanyCoupons() {
 
         List<Coupon> coupons = couponRepository.findAllByCompany_id(this.companyId);
-        System.out.println("coupons"+ coupons +" " + coupons.get(0).getTitle());
          return coupons;
     }
 
