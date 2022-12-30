@@ -1,30 +1,40 @@
 package com.coupons.couponsystem.exception;
 
-import org.springframework.http.HttpStatus;
-
-
-
 //business logic Exception
 
-public class CouponSystemException extends RuntimeException {
 
-    private HttpStatus status;
-    private String message;
+import org.springframework.http.HttpStatus;
 
-    public CouponSystemException( HttpStatus status, String message) {
+public class CouponSystemException extends Exception {
+
+    private HttpStatus httpStatus;
+
+
+    public CouponSystemException() {
+    }
+
+    public CouponSystemException(String message, HttpStatus status) {
         super(message);
-        this.status = status;
-        this.message = message;
+        this.httpStatus= status;
     }
 
-
-    public HttpStatus getStatus() {
-        return status;
+    public CouponSystemException(String message) {
+        super(message);
     }
 
-    @Override
-    public String getMessage() {
-        return message;
+    public CouponSystemException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public CouponSystemException(Throwable cause) {
+        super(cause);
+    }
+
+    public CouponSystemException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 }
-

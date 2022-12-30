@@ -1,5 +1,6 @@
 package com.coupons.couponsystem.ClientLogIn;
 
+import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.service.impl.AdminServiceImpl;
 import com.coupons.couponsystem.service.impl.ClientFacade;
 import com.coupons.couponsystem.service.impl.CompanyServiceImpl;
@@ -25,7 +26,9 @@ public class LoginManager {
 
 
 
-    public ClientFacade logIn(String email, String password, ClientType clientType)  {
+
+
+    public ClientFacade logIn(String email, String password, ClientType clientType) throws CouponSystemException {
 
             switch (clientType) {
                 case Administrator:

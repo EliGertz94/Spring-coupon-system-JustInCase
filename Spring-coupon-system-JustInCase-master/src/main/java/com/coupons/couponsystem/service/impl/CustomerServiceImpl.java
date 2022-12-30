@@ -19,15 +19,21 @@ import java.util.List;
 public class CustomerServiceImpl extends ClientFacade  implements CustomerService {
 
     private long customerId;
-
     public static Logger logger = LoggerFactory.getLogger(CouponSystemApplication.class);
 
 
+    /**
+     *
+     * @param email
+     * @param password
+     * @return
+     * @throws CouponSystemException - customer not found
+     */
     @Override
-    public boolean logIn(String email,String password){
+    public  boolean logIn(String email,String password) throws CouponSystemException {
 
         Customer customer=   customerRepository.findByEmailAndPassword(email,password)
-                .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND,"logIn customer service " ));
+                .orElseThrow(() -> new CouponSystemException("customer not found logIn customerService " ));
 
         if(customerRepository.existsByEmail(email)
                 && customerRepository.existsByPassword(password)){
@@ -37,20 +43,24 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
         return false;
     }
 
-
+    /**
+     *
+     * @param couponId
+     * @throws CouponSystemException - if purchaseCoupon purchase already exist -  customer or coupon not founds by id
+     */
     @Override
-    public void purchaseCoupon(long couponId) {
+    public void purchaseCoupon(long couponId) throws CouponSystemException {
         logger.info("exist or not ?  {} ",couponRepository.existsByCustomers_idAndId(this.customerId,couponId));
         if(couponRepository.existsByCustomers_idAndId(this.customerId,couponId)) {
-        throw new CouponSystemException(HttpStatus.BAD_REQUEST,"purchaseCoupon purchase already exist");
+        throw new CouponSystemException("purchaseCoupon purchase already exist at CustomerService", HttpStatus.BAD_REQUEST);
         }
             Customer customer = customerRepository.findById(this.customerId)
-                    .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND
-                            , " customer not founds by id - customer service"));
+                    .orElseThrow(()
+                            -> new CouponSystemException( " customer not founds by id - customer service",HttpStatus.NOT_FOUND));
 
             Coupon coupon = couponRepository.findById(couponId)
-                    .orElseThrow(() -> new CouponSystemException(HttpStatus.NOT_FOUND
-                            , " customer not founds by id - customer service"));
+                    .orElseThrow(()
+                            -> new CouponSystemException(" coupon not founds by id - customer service",HttpStatus.NOT_FOUND));
 
             customer.getCoupons().add(coupon);
 
@@ -59,8 +69,10 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
     }
 
 
-    //is it legit ?
-    //do I need to do it with a specific repository query ?
+    /**
+     *
+     * @return List<Coupon>
+     */
     @Override
     public List<Coupon> getCustomerCoupons() {
 
@@ -73,25 +85,43 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
 
     }
 
+    /**
+     *
+     * @param maxPrice
+     * @return
+     */
     @Override
     public List<Coupon> getCustomerCoupons(double maxPrice) {
+
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        SecuredUser user = (SecuredUser)authentication.getPrincipal();
+//        this.logIn(user.getUsername(), user.getPassword());
         List<Coupon> coupons = couponRepository.findAllByCustomers_idAndPriceLessThanEqual(this.customerId,maxPrice);
         return coupons;
     }
 
+    /**
+     *
+     * @param category
+     * @return
+     */
     @Override
-
     public List<Coupon> getCustomerCoupons(Category category) {
         List<Coupon> coupons = couponRepository.findAllByCustomers_idAndCategory(this.customerId,category);
         return coupons;
     }
 
+    /**
+     *
+     * @return Customer
+     * @throws CouponSystemException -  customer not found
+     */
     @Override
-    public Customer getCustomerDetails() {
+    public Customer getCustomerDetails() throws CouponSystemException {
 
         Customer customer = customerRepository.findById(this.customerId)
-                .orElseThrow(()-> new CouponSystemException(HttpStatus.NOT_FOUND
-                       ," customer not founds by id - getCustomerDetails"));
+                .orElseThrow(()-> new CouponSystemException(
+                        " customer not found by id - getCustomerDetails"));
 
         return customer;
     }

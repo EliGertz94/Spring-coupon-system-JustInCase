@@ -1,5 +1,6 @@
 package com.coupons.couponsystem.service;
 
+import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Category;
 import com.coupons.couponsystem.model.Coupon;
 import com.coupons.couponsystem.model.Customer;
@@ -9,9 +10,9 @@ import java.util.List;
 public interface CustomerService {
 
 
-    boolean logIn(String email, String password);
+//    boolean logIn(String email, String password) throws CouponSystemException;
 
-    void purchaseCoupon(long couponId);
+    void purchaseCoupon(long couponId) throws CouponSystemException;
 
     List<Coupon> getCustomerCoupons();
 
@@ -19,7 +20,7 @@ public interface CustomerService {
 
     List<Coupon> getCustomerCoupons(Category category);
 
-    Customer getCustomerDetails();
+    Customer getCustomerDetails() throws CouponSystemException;
 
 
 

@@ -23,7 +23,7 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", referencedColumnName = "id",nullable = false)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
     @ToString.Exclude
     @JsonIgnore
     private Company company;
@@ -38,6 +38,7 @@ public class Coupon {
     private double price;
     private String image;
 
+    //get rid of the cascaden
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH)
     @JoinTable(name = "customer_coupons",

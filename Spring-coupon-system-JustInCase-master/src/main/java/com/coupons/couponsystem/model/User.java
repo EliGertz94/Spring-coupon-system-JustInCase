@@ -18,7 +18,15 @@ public class User {
     private String userName;
     private String passWord;
     @Column(name = "client_Role")
+    @Enumerated(EnumType.STRING)
     private ClientType clientRole;
+
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Customer customer;
+//
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Company company;
+
 //    @ToString.Exclude
 //    @JsonIgnore
 //    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)

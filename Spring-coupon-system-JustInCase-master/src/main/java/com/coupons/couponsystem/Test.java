@@ -28,10 +28,13 @@ public class Test implements CommandLineRunner {
 ////                loginManager.logIn("ccc@ccc.com", "ccc123", ClientType.Company);
 ////
 //
-//
-//        AdminService admin = (AdminServiceImpl) loginManager.logIn
-//				("admin@admin.com","admin",ClientType.Administrator);
-//
+////
+//AdminServiceImpl admin = (AdminServiceImpl) loginManager.logIn
+//				("admin@admin.com","admin", ClientType.Administrator);
+//        Company company1 = new Company(0L,"ccc","ccc@ccc.com","ccc123",null);
+//        admin.addCompany(company1);
+//    }
+
 //        Customer customerEntity = new Customer(0L,"eli","yuval","eli@dgdf.com","12345",null);
 //      //admin.addCustomer(customerEntity);
 ////        Customer customerEntity2 = new Customer(0L,"yanna","grtz","yamma@dgdf.com","12345",null);

@@ -12,6 +12,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
+//@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class CouponSystemApplication {
 
 	public static Logger logger = LoggerFactory.getLogger(CouponSystemApplication.class);

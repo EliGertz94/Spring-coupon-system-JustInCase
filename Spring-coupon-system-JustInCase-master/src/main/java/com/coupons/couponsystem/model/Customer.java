@@ -1,6 +1,7 @@
 package com.coupons.couponsystem.model;
 
 
+import com.coupons.couponsystem.ClientLogIn.ClientType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,15 @@ public class Customer {
     private String lastName;
     private String email;
     private String password;
+
+    @Column(name = "client_Role")
+    @Enumerated(EnumType.STRING)
+    private  ClientType clientRole;
+
+//    @OneToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
+
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH)
     @JoinTable(name = "customer_coupons",

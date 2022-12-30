@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @AllArgsConstructor
+
 public class SecuredUser implements UserDetails {
     private User user;
 
