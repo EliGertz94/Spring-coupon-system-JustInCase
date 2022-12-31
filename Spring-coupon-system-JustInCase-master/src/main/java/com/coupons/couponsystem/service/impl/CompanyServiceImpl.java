@@ -45,16 +45,9 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
 
         Company company=   companyRepository.findByEmailAndPassword(email,password)
                 .orElseThrow(() -> new CouponSystemException("company not found at logIn companyService" ));
-//      if(companyRepository.existsByEmail(email)
-//              && companyRepository.existsByPassword(password)) {
 
-        if(company!=null){
           companyId = company.getId();
-
-          System.out.println("companyId "+ companyId);
           return true;
-      }
-        return false;
 
     }
 

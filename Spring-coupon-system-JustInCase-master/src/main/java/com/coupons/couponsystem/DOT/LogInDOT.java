@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class LogInDOT {
 
-    private String email;
+    private String username;
     private String password;
 
     private  ClientType clientType;

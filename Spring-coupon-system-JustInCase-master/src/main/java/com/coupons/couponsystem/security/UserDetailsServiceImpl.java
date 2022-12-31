@@ -8,7 +8,6 @@ import com.coupons.couponsystem.model.Admin;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
 import com.coupons.couponsystem.model.User;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@AllArgsConstructor
+
 @Transactional
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -30,8 +29,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Admin admin = adminRepository.findByEmail(email);
 
+        System.out.println(email);
+        Admin admin = adminRepository.findByEmail(email);
+        System.out.println(admin);
 
         if(admin!=null) {
             User user = new User();
@@ -45,6 +46,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         Company company = companyRepository.findByEmail(email);
+        System.out.println(company);
+
         if(company!=null) {
             User user = new User();
             user.setUserName(company.getEmail());
@@ -57,7 +60,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new SecuredUser(user);
         }
         Customer customer = customerRepository.findByEmail(email);
-
+        System.out.println(customer);
         if(customer!=null) {
             User user = new User();
             user.setUserName(customer.getEmail());

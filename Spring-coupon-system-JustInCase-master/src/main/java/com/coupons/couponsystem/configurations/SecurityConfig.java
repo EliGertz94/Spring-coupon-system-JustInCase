@@ -2,6 +2,8 @@ package com.coupons.couponsystem.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,6 +25,7 @@ public class SecurityConfig {
         http.csrf().disable();
 
       http.authorizeHttpRequests()
+              .mvcMatchers("api/authentication/**").permitAll()
               .mvcMatchers("/api/admin/**").hasAuthority("Administrator")
               .mvcMatchers("/api/company/**").hasAuthority("Company")
               .mvcMatchers("/api/customer/**").hasAuthority("Customer")
@@ -41,6 +44,12 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return  NoOpPasswordEncoder.getInstance();
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception {
+            return auth.getAuthenticationManager();
     }
 
 

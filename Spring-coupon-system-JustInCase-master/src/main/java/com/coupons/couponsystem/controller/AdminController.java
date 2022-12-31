@@ -1,13 +1,10 @@
 package com.coupons.couponsystem.controller;
 
-import com.coupons.couponsystem.DOT.LogInDOT;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
-import com.coupons.couponsystem.security.SecuredUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,18 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/admin/")
 public class AdminController extends ClientController {
-    @Override
-    @PostMapping("log-in")
-    public boolean logIn(Authentication authentication, LogInDOT logInDOT) {
 
-        SecuredUser user =(SecuredUser) authentication.getPrincipal();
 
-        try {
-            return adminService.logIn(user.getUsername(),user.getPassword());
-        } catch (CouponSystemException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
-        }
-    }
 
     @PostMapping("addcompany")
         public ResponseEntity<Company> addCompany(@RequestBody Company company){

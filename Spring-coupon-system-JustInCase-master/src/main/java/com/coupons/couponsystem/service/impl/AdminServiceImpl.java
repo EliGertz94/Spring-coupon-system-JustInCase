@@ -45,7 +45,9 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      */
     @Override
     public Company addCompany(Company company) throws CouponSystemException {
-        if(!companyRepository.existsByEmail(company.getEmail())) {
+        if(!companyRepository.existsByEmail(company.getEmail())
+
+        ) {
             if (!companyRepository.existsByPassword(company.getPassword())) {
                 Company newCompany = companyRepository.save(company);
                 return newCompany;
@@ -85,7 +87,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      * @throws CouponSystemException company not found
      */
     public void deleteCompany(long id) throws CouponSystemException {
-            Company company = companyRepository.findById(id)
+            Company company =  companyRepository.findById(id)
                     .orElseThrow(() -> new CouponSystemException("deleteCompany company not found"));
 
             companyRepository.delete(company);
@@ -111,8 +113,8 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
         public Company getOneCompany(long id) throws CouponSystemException {
            return  companyRepository.findById(id).orElseThrow
                   (() -> new CouponSystemException("company not found at getOneCompany"));
-        }
 
+    }
     /**
      *
      * @param customer
@@ -121,9 +123,10 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      */
     @Override
     public Customer addCustomer(Customer customer) throws CouponSystemException {
-        if(customerRepository.existsByEmail(customer.getEmail()))
+        if(customerRepository.existsByEmail(customer.getEmail())
+                &&companyRepository.existsByEmail(customer.getEmail()))
         {
-            throw new CouponSystemException("Email exists already  addCustomer at adminService");
+            throw new CouponSystemException("Email exists already addCustomer at adminService");
         }
         //optional
         customer.setClientRole(ClientType.Customer);

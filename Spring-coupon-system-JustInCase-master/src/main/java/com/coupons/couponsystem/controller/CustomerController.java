@@ -1,12 +1,10 @@
 package com.coupons.couponsystem.controller;
 
 
-import com.coupons.couponsystem.DOT.LogInDOT;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Category;
 import com.coupons.couponsystem.model.Coupon;
 import com.coupons.couponsystem.model.Customer;
-import com.coupons.couponsystem.security.SecuredUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,50 +19,13 @@ import java.util.List;
 @RequestMapping("api/customer/")
 public class CustomerController extends ClientController {
 
-//    @Autowired
-//    @Qualifier("sessionRegistry")
-//    private SessionRegistry sessionRegistry;
 
 
     Logger logger= LoggerFactory.getLogger(CompanyController.class);
 
-//    @PostMapping("/login")
-//    public boolean logIn(@RequestBody LogInDOT logInDOT){
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        Authentication authentication = context.getAuthentication();
-//        SecuredUser user =(SecuredUser) authentication.getPrincipal();
-//        return customerService.logIn(user.getUsername(),user.getPassword());
-//
-//    }
-
-    @PostMapping("/login")
-    public boolean logIn(Authentication authentication, LogInDOT logInDOT){
-
-        logger.info("authentication {} " , authentication );
-        SecuredUser user =(SecuredUser) authentication.getPrincipal();
 
 
-        try {
-            return customerService.logIn(user.getUsername(),user.getPassword());
-        } catch (CouponSystemException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
 
-        }
-
-//        List<Object> principals = sessionRegistry.getAllPrincipals();
-//
-//        List<String> usersNamesList = new ArrayList<String>();
-//
-//        for (Object principal: principals) {
-//            if (principal instanceof SecuredUser) {
-//                usersNamesList.add(((SecuredUser) principal).getUsername());
-//            }
-//        }
-//
-//        usersNamesList.forEach(u->logger.info("user loggedin {}",u));
-
-
-    }
 
 
     @PostMapping("/coupon/{couponId}")
