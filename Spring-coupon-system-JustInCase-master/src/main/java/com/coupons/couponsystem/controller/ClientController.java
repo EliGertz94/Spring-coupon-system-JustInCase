@@ -1,5 +1,6 @@
 package com.coupons.couponsystem.controller;
 
+import com.coupons.couponsystem.security.JWTTokenProvider;
 import com.coupons.couponsystem.service.impl.AdminServiceImpl;
 import com.coupons.couponsystem.service.impl.CompanyServiceImpl;
 import com.coupons.couponsystem.service.impl.CustomerServiceImpl;
@@ -21,6 +22,9 @@ public abstract  class ClientController {
 
         @Autowired
         protected AuthenticationManager authenticationManager;
+
+        @Autowired
+        protected JWTTokenProvider tokenProvider;
 
 
 

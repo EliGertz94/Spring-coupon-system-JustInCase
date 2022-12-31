@@ -1,52 +1,50 @@
 package com.coupons.couponsystem.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+
+
+@Component
 public class JWTTokenProvider {
-//
-//    @Value("${app.jwt-secret}")
-//    private String jwtSecret;
-//    @Value("${app.jwt-expiration-milliseconds}")
-//    private int jwtExpirationInMs;
-//
-//    public String generateToken(Authentication authentication){
-//        String username = authentication.getName();
-//        Date currentDate = new Date();
-//        Date expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
-//
-//        String token = Jwts.builder()
-//                .setSubject(username)
-//                .setIssuedAt(new Date())
-//                .setExpiration(expireDate)
-//                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-//                .compact();
-//        return token;
-//    }
-//
-//    // get username from the token
-//
-//    public String getUsernameFromJWT(String token){
-//        Claims claims = Jwts.parser()
-//                .setSigningKey(jwtSecret)
-//                .parseClaimsJws(token)
-//                .getBody();
-//        return claims.getSubject();
-//    }
-//
-//    // validate JWT token
-//    public boolean validateToken(String token){
-//        try{
-//            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-//            return true;
-//        }catch (SignatureException ex){
-//            throw new CouponSystemException(HttpStatus.BAD_REQUEST, "Invalid JWT signature");
-//        } catch (MalformedJwtException ex) {
-//            throw new CouponSystemException(HttpStatus.BAD_REQUEST, "Invalid JWT token");
-//        } catch (ExpiredJwtException ex) {
-//            throw new CouponSystemException(HttpStatus.BAD_REQUEST, "Expired JWT token");
-//        } catch (UnsupportedJwtException ex) {
-//            throw new CouponSystemException(HttpStatus.BAD_REQUEST, "Unsupported JWT token");
-//        } catch (IllegalArgumentException ex) {
-//            throw new CouponSystemException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
-//        }
-//    }
-//
+
+    public String generateToken(Authentication authentication){
+        String username =authentication.getName();
+        Date currentDate = new Date();
+        Date expireDate =  new Date(currentDate.getTime()+ SecurityConstants.JWT_EXPIRATION);
+
+        String token = Jwts.builder().
+        setSubject(username).
+                setIssuedAt(currentDate).
+                setExpiration(expireDate).
+                signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
+                .compact();
+            return token;
+
+    }
+
+    public String getUserNameFromJwt(String token)
+    {
+        Claims claims =Jwts.parser()
+                .setSigningKey(SecurityConstants.JWT_SECRET)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public boolean validateToken(String token){
+        try {
+            Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
+            return true;
+        }catch (Exception e){
+            throw  new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+        }
+    }
+
 }

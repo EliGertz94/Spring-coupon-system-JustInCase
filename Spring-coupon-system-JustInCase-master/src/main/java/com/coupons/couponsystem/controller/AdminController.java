@@ -31,7 +31,7 @@ public class AdminController extends ClientController {
         try {
             return new ResponseEntity<>(adminService.updateCompany(company),HttpStatus.OK);
         } catch (CouponSystemException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+            throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
 
         }
     }
@@ -70,12 +70,12 @@ public class AdminController extends ClientController {
         }
     }
 
-    @PutMapping("/customer/")
+    @PutMapping("/customer/update")
     public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer){
         try {
             return new ResponseEntity<>(adminService.updateCustomer(customer),HttpStatus.OK);
         } catch (CouponSystemException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+            throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
 
         }
     }

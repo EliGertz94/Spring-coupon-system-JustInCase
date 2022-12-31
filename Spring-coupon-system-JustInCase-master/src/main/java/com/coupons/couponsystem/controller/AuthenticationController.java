@@ -1,8 +1,10 @@
 package com.coupons.couponsystem.controller;
 
 import com.coupons.couponsystem.DOT.LogInDOT;
+import com.coupons.couponsystem.DOT.ResponseDTO;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthenticationController extends ClientController {
 
     @PostMapping("/login-admin")
-    public boolean logInAdmin(@RequestBody  LogInDOT logInDOT) {
+    public ResponseEntity<ResponseDTO> logInAdmin(@RequestBody  LogInDOT logInDOT) {
     try{
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -28,14 +30,16 @@ public class AuthenticationController extends ClientController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }catch (AuthenticationException e){
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
-    }
+
+        String token= tokenProvider.generateToken(authentication);
 
 
-        try {
-            return adminService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
+             adminService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
+
+             return new ResponseEntity<>(new ResponseDTO(token),HttpStatus.OK);
         } catch (CouponSystemException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+        }catch (AuthenticationException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
         }
     }
