@@ -9,19 +9,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 
 @RestController
 @RequestMapping("api/authentication")
 public class AuthenticationController extends ClientController {
-
     @PostMapping("/login-admin")
     public ResponseEntity<ResponseDTO> logInAdmin(@RequestBody  LogInDOT logInDOT) {
     try{
+        System.out.println("admin login ");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         logInDOT.getUsername(),
@@ -45,7 +43,7 @@ public class AuthenticationController extends ClientController {
     }
 
     @PostMapping("/login-company")
-    public boolean logInCompany(@RequestBody LogInDOT logInDOT){
+    public  ResponseEntity<ResponseDTO> logInCompany(@RequestBody LogInDOT logInDOT){
     try{
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -55,12 +53,13 @@ public class AuthenticationController extends ClientController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }catch (AuthenticationException e){
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
-    }
+        String token= tokenProvider.generateToken(authentication);
 
-        try {
-            return companyService.logIn(logInDOT.getUsername(), logInDOT.getPassword());
+             companyService.logIn(logInDOT.getUsername(), logInDOT.getPassword());
+
+        return new ResponseEntity<>(new ResponseDTO(token),HttpStatus.OK);
+        }catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
 
@@ -69,7 +68,7 @@ public class AuthenticationController extends ClientController {
     }
 
     @PostMapping("/login-customer")
-    public boolean logInCustomer(@RequestBody LogInDOT logInDOT){
+    public ResponseEntity<ResponseDTO> logInCustomer(@RequestBody LogInDOT logInDOT){
 
         try{
             Authentication authentication = authenticationManager.authenticate(
@@ -80,13 +79,14 @@ public class AuthenticationController extends ClientController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token= tokenProvider.generateToken(authentication);
+
+             customerService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
+
+             return new ResponseEntity<>(new ResponseDTO(token),HttpStatus.OK);
 
         }catch (AuthenticationException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
-        }
-
-        try {
-            return customerService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
 

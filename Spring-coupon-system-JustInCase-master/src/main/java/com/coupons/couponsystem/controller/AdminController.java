@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("api/admin/")
 public class AdminController extends ClientController {
 
 
 
-    @PostMapping("addcompany")
+    @PostMapping("add-company")
         public ResponseEntity<Company> addCompany(@RequestBody Company company){
         try {
             return new ResponseEntity<>(adminService.addCompany(company), HttpStatus.OK);
@@ -26,7 +26,7 @@ public class AdminController extends ClientController {
         }
     }
 
-    @PutMapping("updatecompany")
+    @PutMapping("update-company")
     public ResponseEntity<Company> updateCompany(@RequestBody Company company){
         try {
             return new ResponseEntity<>(adminService.updateCompany(company),HttpStatus.OK);
@@ -36,7 +36,7 @@ public class AdminController extends ClientController {
         }
     }
 
-    @DeleteMapping("deletecompany/{companyId}")
+    @DeleteMapping("delete-company/{companyId}")
     public ResponseEntity<String> deleteCompany(@PathVariable Long companyId){
         try {
             adminService.deleteCompany(companyId);

@@ -33,7 +33,7 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
     public  boolean logIn(String email,String password) throws CouponSystemException {
 
         Customer customer=   customerRepository.findByEmailAndPassword(email,password)
-                .orElseThrow(() -> new CouponSystemException("customer not found logIn customerService " ));
+                .orElseThrow(() -> new CouponSystemException("customer not found logIn customerService ",HttpStatus.NOT_FOUND));
 
         if(customerRepository.existsByEmail(email)
                 && customerRepository.existsByPassword(password)){
@@ -121,7 +121,7 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
 
         Customer customer = customerRepository.findById(this.customerId)
                 .orElseThrow(()-> new CouponSystemException(
-                        " customer not found by id - getCustomerDetails"));
+                        "customer not found by id - getCustomerDetails",HttpStatus.NOT_FOUND));
 
         return customer;
     }

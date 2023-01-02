@@ -30,13 +30,8 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     public boolean logIn(String email,String password) throws CouponSystemException {
 
         Admin admin=   adminRepository.findByEmailAndPassword(email,password)
-                .orElseThrow(() -> new CouponSystemException("Admin not found " ));
-        if(admin !=null) {
-            return true;
-        }
-        return false;
-
-
+                .orElseThrow(() -> new CouponSystemException("Admin not found ",HttpStatus.BAD_REQUEST));
+        return true;
     }
 
     /**
@@ -50,14 +45,15 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
             && !customerRepository.existsByEmail(company.getEmail()))
          {
             if (!companyRepository.existsByPassword(company.getPassword())) {
+                company.setClientRole(ClientType.Company);
                 Company newCompany = companyRepository.save(company);
                 return newCompany;
             }
-            throw new CouponSystemException("addCompany error password exists already");
+            throw new CouponSystemException("addCompany error password exists already",HttpStatus.BAD_REQUEST);
 
         }
 
-        throw new CouponSystemException("addCompany error email  exists already");
+        throw new CouponSystemException("addCompany error email  exists already",HttpStatus.BAD_REQUEST);
 
     }
 
@@ -112,7 +108,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      */
     public void deleteCompany(long id) throws CouponSystemException {
             Company company =  companyRepository.findById(id)
-                    .orElseThrow(() -> new CouponSystemException("deleteCompany company not found"));
+                    .orElseThrow(() -> new CouponSystemException("deleteCompany company not found",HttpStatus.NOT_FOUND));
 
             companyRepository.delete(company);
 
@@ -136,7 +132,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     @Override
         public Company getOneCompany(long id) throws CouponSystemException {
            return  companyRepository.findById(id).orElseThrow
-                  (() -> new CouponSystemException("company not found at getOneCompany"));
+                  (() -> new CouponSystemException("company not found at getOneCompany",HttpStatus.NOT_FOUND));
 
     }
     /**
@@ -150,7 +146,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
         if(customerRepository.existsByEmail(customer.getEmail())
                 &&companyRepository.existsByEmail(customer.getEmail()))
         {
-            throw new CouponSystemException("Email exists already addCustomer at adminService");
+            throw new CouponSystemException("Email exists already addCustomer at adminService",HttpStatus.BAD_REQUEST);
         }
         //optional
         customer.setClientRole(ClientType.Customer);
@@ -211,7 +207,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     @Override
         public void deleteCustomer(long id) throws CouponSystemException {
             Customer customer = customerRepository.findById(id)
-                    .orElseThrow(() -> new CouponSystemException("customer not found at deleteCustomer adminService"));
+                    .orElseThrow(() -> new CouponSystemException("customer not found at deleteCustomer adminService",HttpStatus.NOT_FOUND));
             System.out.println(customer);
             customerRepository.delete(customer);
         }
@@ -234,7 +230,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     @Override
     public Customer getOneCustomer(long id) throws CouponSystemException {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new CouponSystemException("customer not found at getOneCustomer"));
+                .orElseThrow(() -> new CouponSystemException("customer not found at getOneCustomer",HttpStatus.NOT_FOUND));
 
     }
 

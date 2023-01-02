@@ -20,7 +20,7 @@ public class Admin {
     private String password;
     @Column(name = "client_Role")
     @Enumerated(EnumType.STRING)
-    private final ClientType clientRole =ClientType.Administrator;
+    private  ClientType clientRole;
 
 
 

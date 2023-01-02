@@ -44,7 +44,7 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
     public boolean logIn(String email, String password) throws CouponSystemException {
 
         Company company=   companyRepository.findByEmailAndPassword(email,password)
-                .orElseThrow(() -> new CouponSystemException("company not found at logIn companyService" ));
+                .orElseThrow(() -> new CouponSystemException("company not found at logIn companyService",HttpStatus.NOT_FOUND));
 
           companyId = company.getId();
           return true;
@@ -165,7 +165,7 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
     @Override
     public Company getCompanyDetails() throws CouponSystemException {
        return companyRepository.findFullCompany(this.companyId)
-               .orElseThrow(() -> new CouponSystemException("company not found at getCompanyDetails CompanyService" ));
+               .orElseThrow(() -> new CouponSystemException("company not found at getCompanyDetails CompanyService",HttpStatus.NOT_FOUND ));
 
 
     }

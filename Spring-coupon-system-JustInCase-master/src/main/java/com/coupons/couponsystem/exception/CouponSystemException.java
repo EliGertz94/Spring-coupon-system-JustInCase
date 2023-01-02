@@ -18,9 +18,6 @@ public class CouponSystemException extends Exception {
         this.httpStatus= status;
     }
 
-    public CouponSystemException(String message) {
-        super(message);
-    }
 
     public CouponSystemException(String message, Throwable cause) {
         super(message, cause);
