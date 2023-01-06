@@ -2,16 +2,14 @@ package com.coupons.couponsystem.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Entity
-
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

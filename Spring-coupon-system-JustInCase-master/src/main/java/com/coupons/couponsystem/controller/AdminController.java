@@ -28,6 +28,7 @@ public class AdminController extends ClientController {
 
     @PutMapping("update-company")
     public ResponseEntity<Company> updateCompany(@RequestBody Company company){
+        System.out.println("company.getEmail() "+company.getEmail());
         try {
             return new ResponseEntity<>(adminService.updateCompany(company),HttpStatus.OK);
         } catch (CouponSystemException e) {

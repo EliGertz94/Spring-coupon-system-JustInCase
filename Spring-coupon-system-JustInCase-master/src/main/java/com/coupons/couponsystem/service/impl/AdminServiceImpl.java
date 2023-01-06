@@ -66,6 +66,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      */
         @Override
         public Company updateCompany(Company company) throws CouponSystemException {
+            System.out.println(company);
 
                 Company companyRecord = companyRepository.findById(company.getId())
                         .orElseThrow(() -> new CouponSystemException("company not found updateCompany", HttpStatus.NOT_FOUND));

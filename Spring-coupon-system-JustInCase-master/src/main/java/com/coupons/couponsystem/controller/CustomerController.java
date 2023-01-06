@@ -19,18 +19,12 @@ import java.util.List;
 @RequestMapping("api/customer/")
 public class CustomerController extends ClientController {
 
-
-
     Logger logger= LoggerFactory.getLogger(CompanyController.class);
-
-
-
-
-
 
     @PostMapping("/coupon/{couponId}")
     public ResponseEntity<String> purchaseCoupon(@PathVariable long couponId){
         try {
+
             customerService.purchaseCoupon(couponId);
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
@@ -39,7 +33,7 @@ public class CustomerController extends ClientController {
         return new ResponseEntity<>("coupon id "+couponId+ "  was purchased ", HttpStatus.OK);
     }
 
-    @GetMapping("/coupons")
+    @GetMapping("/coupons/")
     public ResponseEntity<List<Coupon>> getCustomerCoupons(Authentication authentication){
         return new ResponseEntity<>(customerService.getCustomerCoupons(),HttpStatus.OK);
     }

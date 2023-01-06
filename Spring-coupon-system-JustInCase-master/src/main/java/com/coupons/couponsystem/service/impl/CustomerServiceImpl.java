@@ -19,6 +19,7 @@ import java.util.List;
 public class CustomerServiceImpl extends ClientFacade  implements CustomerService {
 
     private long customerId;
+
     public static Logger logger = LoggerFactory.getLogger(CouponSystemApplication.class);
 
 
@@ -38,6 +39,7 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
         if(customerRepository.existsByEmail(email)
                 && customerRepository.existsByPassword(password)){
             customerId = customer.getId();
+
             return true;
         }
         return false;
@@ -50,22 +52,29 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
      */
     @Override
     public void purchaseCoupon(long couponId) throws CouponSystemException {
-        logger.info("exist or not ?  {} ",couponRepository.existsByCustomers_idAndId(this.customerId,couponId));
+        System.out.println("this.customerId "+this.customerId);
         if(couponRepository.existsByCustomers_idAndId(this.customerId,couponId)) {
         throw new CouponSystemException("purchaseCoupon purchase already exist at CustomerService", HttpStatus.BAD_REQUEST);
         }
+
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(()
+                        -> new CouponSystemException(" coupon not founds by id - customer service",HttpStatus.NOT_FOUND));
+
+        if(coupon.getAmount()<= 0)
+        {
+            throw new CouponSystemException("No coupons available ", HttpStatus.NOT_FOUND);
+        }
+
             Customer customer = customerRepository.findById(this.customerId)
                     .orElseThrow(()
                             -> new CouponSystemException( " customer not founds by id - customer service",HttpStatus.NOT_FOUND));
 
-            Coupon coupon = couponRepository.findById(couponId)
-                    .orElseThrow(()
-                            -> new CouponSystemException(" coupon not founds by id - customer service",HttpStatus.NOT_FOUND));
+
 
             customer.getCoupons().add(coupon);
 
             coupon.setAmount(coupon.getAmount() - 1);
-
     }
 
 
@@ -124,5 +133,13 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
                         "customer not found by id - getCustomerDetails",HttpStatus.NOT_FOUND));
 
         return customer;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 }

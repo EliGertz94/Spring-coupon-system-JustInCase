@@ -164,11 +164,18 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
      */
     @Override
     public Company getCompanyDetails() throws CouponSystemException {
+
        return companyRepository.findFullCompany(this.companyId)
                .orElseThrow(() -> new CouponSystemException("company not found at getCompanyDetails CompanyService",HttpStatus.NOT_FOUND ));
 
 
     }
 
+    public long getCompanyId() {
+        return companyId;
+    }
 
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
 }

@@ -57,7 +57,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             System.out.println(" user logged in "+ user.getClientRole());
 
 
-            return new SecuredUser(user);
+            return new SecuredUser(user,company.getId());
         }
         Customer customer = customerRepository.findByEmail(email);
         System.out.println(customer);
@@ -69,7 +69,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
             System.out.println(" user logged in "+ user.getClientRole());
 
-            return new SecuredUser(user);
+            return new SecuredUser(user,customer.getId());
         }
 
 

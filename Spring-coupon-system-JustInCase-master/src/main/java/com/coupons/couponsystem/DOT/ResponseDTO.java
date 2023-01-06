@@ -1,11 +1,15 @@
 package com.coupons.couponsystem.DOT;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
         @Data
+        @NoArgsConstructor
+        @Builder
         public class ResponseDTO {
         private String accessToken;
-        private String tokenType = "Bearer ";
+        private final String tokenType = "Bearer ";
 
 
         public ResponseDTO(String accessToken)

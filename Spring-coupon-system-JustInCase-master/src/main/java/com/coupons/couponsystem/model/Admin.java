@@ -1,11 +1,11 @@
 package com.coupons.couponsystem.model;
 
 import com.coupons.couponsystem.ClientLogIn.ClientType;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 @Entity
 @Getter
 @Setter

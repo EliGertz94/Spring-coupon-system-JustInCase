@@ -2,12 +2,12 @@ package com.coupons.couponsystem.model;
 
 
 import com.coupons.couponsystem.ClientLogIn.ClientType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 

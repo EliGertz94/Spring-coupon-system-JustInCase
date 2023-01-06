@@ -1,7 +1,6 @@
 package com.coupons.couponsystem.security;
 
 import com.coupons.couponsystem.model.User;
-import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,10 +8,24 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-@AllArgsConstructor
+
 
 public class SecuredUser implements UserDetails {
     private User user;
+    private long userId;
+
+    public SecuredUser(User user) {
+        this.user = user;
+    }
+
+    public SecuredUser(User user, long userId) {
+        this.user = user;
+        this.userId = userId;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
 
     @Override
     public String getUsername() {
@@ -30,6 +43,10 @@ public class SecuredUser implements UserDetails {
         List<SecurityAuthority> authoreties = new LinkedList<>();
         authoreties.add(new SecurityAuthority(user));
         return authoreties;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
 
