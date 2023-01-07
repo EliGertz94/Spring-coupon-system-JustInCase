@@ -145,7 +145,7 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     @Override
     public Customer addCustomer(Customer customer) throws CouponSystemException {
         if(customerRepository.existsByEmail(customer.getEmail())
-                &&companyRepository.existsByEmail(customer.getEmail()))
+                ||companyRepository.existsByEmail(customer.getEmail()))
         {
             throw new CouponSystemException("Email exists already addCustomer at adminService",HttpStatus.BAD_REQUEST);
         }

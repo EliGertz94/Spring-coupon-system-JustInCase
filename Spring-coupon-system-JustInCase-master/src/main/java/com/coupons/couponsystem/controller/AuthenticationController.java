@@ -3,6 +3,7 @@ package com.coupons.couponsystem.controller;
 import com.coupons.couponsystem.DOT.LogInDOT;
 import com.coupons.couponsystem.DOT.ResponseDTO;
 import com.coupons.couponsystem.exception.CouponSystemException;
+import com.coupons.couponsystem.model.Customer;
 import com.coupons.couponsystem.security.SecuredUser;
 import com.coupons.couponsystem.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,10 +39,11 @@ public class AuthenticationController extends ClientController {
                         logInDOT.getPassword()));
         SecuredUser user = (SecuredUser) userDetailsService.loadUserByUsername(logInDOT.getUsername());
         String token= tokenProvider.generateToken(user);
+        GrantedAuthority grantedAuth = user.getAuthorities().stream().toList().get(0);
 
         adminService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
 
-        return new ResponseEntity<>(new ResponseDTO(token),HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(token,grantedAuth),HttpStatus.OK);
 
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
@@ -65,8 +68,8 @@ public class AuthenticationController extends ClientController {
         String token= tokenProvider.generateToken(user);
 
         companyService.logIn(logInDOT.getUsername(), logInDOT.getPassword());
-
-        return new ResponseEntity<>( ResponseDTO.builder().accessToken(token).build(),HttpStatus.OK);
+        GrantedAuthority grantedAuth = user.getAuthorities().stream().toList().get(0);
+        return new ResponseEntity<>(new  ResponseDTO(token,grantedAuth),HttpStatus.OK);
 
         }catch (AuthenticationException e){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
@@ -91,9 +94,10 @@ public class AuthenticationController extends ClientController {
             SecuredUser user = (SecuredUser) userDetailsService.loadUserByUsername(logInDOT.getUsername());
 
             String token= tokenProvider.generateToken(user);
-             customerService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
+            customerService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
+            GrantedAuthority grantedAuth = user.getAuthorities().stream().toList().get(0);
 
-             return new ResponseEntity<>(new ResponseDTO(token),HttpStatus.OK);
+             return new ResponseEntity<>(new ResponseDTO(token,grantedAuth),HttpStatus.OK);
 
         }catch (AuthenticationException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
@@ -103,6 +107,14 @@ public class AuthenticationController extends ClientController {
         }
 
     }
+    @PostMapping("/add-customer/")
+    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer){
+        try {
+            return  new ResponseEntity<>(adminService.addCustomer(customer),HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
 
+        }
+    }
 
 }

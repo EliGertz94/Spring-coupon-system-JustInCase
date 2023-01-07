@@ -41,6 +41,7 @@ public class SecurityConfig {
 
       http.authorizeHttpRequests()
               .requestMatchers("/api/authentication/**").permitAll()
+              .requestMatchers("/api/authentication/**").permitAll()
               .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
               .requestMatchers("/api/admin/**").hasAuthority("Administrator")
               .requestMatchers("/api/company/**").hasAuthority("Company")
@@ -99,14 +100,14 @@ public class SecurityConfig {
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {
 //        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-//        configuration.setAllowedMethods(Arrays.asList("POST"));
-//        configuration.setAllowedHeaders(List.of("Authorization"));
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:3000/"));
+//        configuration.setAllowedMethods(Arrays.asList("POST","GET"));
+//       // configuration.setAllowedHeaders(List.of("Authorization"));
 //       UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 //        source.registerCorsConfiguration("/**", configuration);
 //        return source;
 //    }
-
+//
 
 
 }
