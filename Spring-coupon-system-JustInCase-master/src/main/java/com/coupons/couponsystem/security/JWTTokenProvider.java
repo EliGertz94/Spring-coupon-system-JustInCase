@@ -29,11 +29,11 @@ public class JWTTokenProvider {
                 builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
+                .claim("authority",userDetails.getAuthorities().stream().toList().get(0).getAuthority())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // make an instance constant
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
-
 
     }
 

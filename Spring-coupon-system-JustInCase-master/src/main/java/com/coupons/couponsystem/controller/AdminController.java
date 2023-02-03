@@ -12,6 +12,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("api/admin/")
+
 public class AdminController extends ClientController {
 
 
@@ -47,7 +48,7 @@ public class AdminController extends ClientController {
         return new ResponseEntity<>("company was deleted",HttpStatus.OK);
     }
 
-    @GetMapping("/company/getall")
+    @GetMapping("/company/get-all/")
     public ResponseEntity<List<Company>> getAllCompanies(){
         return  new ResponseEntity<>(adminService.getAllCompanies(),HttpStatus.OK);
     }

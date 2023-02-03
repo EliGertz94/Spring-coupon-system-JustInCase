@@ -2,6 +2,7 @@ package com.coupons.couponsystem.model;
 
 
 import com.coupons.couponsystem.ClientLogIn.ClientType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,7 @@ public class Company {
 //    private User user;
 
     @ToString.Exclude
-    //@JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "company",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Coupon> coupons ;
 

@@ -32,14 +32,12 @@ public class LoginManager {
 
             switch (clientType) {
                 case Administrator:
-            //AdminServiceImpl adminFacade= ctx.getBean(AdminServiceImpl.class);
                     if(adminService.logIn(email,password)){
                         return adminService;
                     }
 
                     break;
                 case Company:
-             //      CompanyServiceImpl companyFacade = ctx.getBean(CompanyServiceImpl.class);
 
                     if(companyService.logIn(email,password))
                     {
@@ -49,7 +47,6 @@ public class LoginManager {
 
                 break;
             case Customer:
-            //   CustomerServiceImpl customerFacade=  ctx.getBean(CustomerServiceImpl.class);
                 if(customerService.logIn(email,password)){
                     return customerService;
                 }

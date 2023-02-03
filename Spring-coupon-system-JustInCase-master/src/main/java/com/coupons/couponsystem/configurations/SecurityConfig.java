@@ -37,7 +37,8 @@ public class SecurityConfig {
         http.csrf().disable().
         exceptionHandling()
         .authenticationEntryPoint(jwtEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
       http.authorizeHttpRequests()
               .requestMatchers("/api/authentication/**").permitAll()
@@ -46,7 +47,7 @@ public class SecurityConfig {
               .requestMatchers("/api/admin/**").hasAuthority("Administrator")
               .requestMatchers("/api/company/**").hasAuthority("Company")
               .requestMatchers("/api/customer/**").hasAuthority("Customer")
-                .anyRequest().authenticated()
+              .anyRequest().authenticated()
 //                .and()
 //                .formLogin()
                 .and()

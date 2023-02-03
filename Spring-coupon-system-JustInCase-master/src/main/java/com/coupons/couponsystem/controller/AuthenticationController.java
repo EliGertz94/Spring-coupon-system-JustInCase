@@ -33,12 +33,16 @@ public class AuthenticationController extends ClientController {
         System.out.println(logInDOT.getUsername()+
                 logInDOT.getPassword());
         System.out.println("admin login ");
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         logInDOT.getUsername(),
                         logInDOT.getPassword()));
+
         SecuredUser user = (SecuredUser) userDetailsService.loadUserByUsername(logInDOT.getUsername());
+
         String token= tokenProvider.generateToken(user);
+
         GrantedAuthority grantedAuth = user.getAuthorities().stream().toList().get(0);
 
         adminService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
@@ -46,9 +50,9 @@ public class AuthenticationController extends ClientController {
         return new ResponseEntity<>(new ResponseDTO(token,grantedAuth),HttpStatus.OK);
 
         } catch (CouponSystemException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+            throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
         }catch (AuthenticationException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
         }
     }
 
@@ -72,9 +76,9 @@ public class AuthenticationController extends ClientController {
         return new ResponseEntity<>(new  ResponseDTO(token,grantedAuth),HttpStatus.OK);
 
         }catch (AuthenticationException e){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
-        } catch (CouponSystemException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+    } catch (CouponSystemException e) {
+        throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
 
         }
 
@@ -112,7 +116,7 @@ public class AuthenticationController extends ClientController {
         try {
             return  new ResponseEntity<>(adminService.addCustomer(customer),HttpStatus.OK);
         } catch (CouponSystemException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+            throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
 
         }
     }
