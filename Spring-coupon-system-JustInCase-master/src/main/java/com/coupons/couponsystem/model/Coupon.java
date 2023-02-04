@@ -36,6 +36,8 @@ public class Coupon {
     private double price;
     private String image;
 
+    private boolean buyable;
+
     //get rid of the cascaden
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH)

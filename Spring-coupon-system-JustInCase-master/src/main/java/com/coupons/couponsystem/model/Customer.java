@@ -1,7 +1,6 @@
 package com.coupons.couponsystem.model;
 
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,16 +19,12 @@ public class Customer {
     private long id;
     private String firstName;
     private String lastName;
-    private String email;
-    private String password;
+//    private String email;
+//    private String password;
 
-    @Column(name = "client_Role")
-    @Enumerated(EnumType.STRING)
-    private  ClientType clientRole;
-
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userName")
+    private User user;
 
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH)
@@ -38,4 +33,11 @@ public class Customer {
             inverseJoinColumns = @JoinColumn(name = "coupon_id" ,referencedColumnName = "id"))
     @ToString.Exclude
     private List<Coupon> coupons;
+
+    public Customer(long id, String firstName, String lastName, List<Coupon> coupons) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.coupons = coupons;
+    }
 }

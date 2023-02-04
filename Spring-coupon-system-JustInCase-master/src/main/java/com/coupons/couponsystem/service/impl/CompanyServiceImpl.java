@@ -4,6 +4,7 @@ import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Category;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Coupon;
+import com.coupons.couponsystem.model.User;
 import com.coupons.couponsystem.security.SecuredUser;
 import com.coupons.couponsystem.service.CompanyService;
 import org.slf4j.Logger;
@@ -43,12 +44,16 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
     @Override
     public boolean logIn(String email, String password) throws CouponSystemException {
 
-        Company company=   companyRepository.findByEmailAndPassword(email,password)
-                .orElseThrow(() -> new CouponSystemException("company not found at logIn companyService",HttpStatus.NOT_FOUND));
+        User user =userRepository.findByUsername(email)
+                .orElseThrow(() -> new CouponSystemException("user company not found at logIn companyService",HttpStatus.NOT_FOUND));
+        if(user.getPassword().equals(password)){
+            Company company = companyRepository.findByUserId(user.getId())
+                    .orElseThrow(() -> new CouponSystemException("company not found by user at logIn companyService", HttpStatus.NOT_FOUND));
 
-          companyId = company.getId();
-          return true;
-
+            companyId = company.getId();
+            return true;
+        }
+        return false;
     }
 
 

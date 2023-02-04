@@ -1,11 +1,15 @@
-package com.coupons.couponsystem.DOT;
+package com.coupons.couponsystem.DTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
-@Data
+        @Data
         @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
         public class ResponseDTO {
         private String accessToken;
         private final String tokenType = "Bearer ";

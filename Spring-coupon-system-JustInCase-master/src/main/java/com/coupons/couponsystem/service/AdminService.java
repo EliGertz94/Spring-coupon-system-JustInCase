@@ -3,6 +3,7 @@ package com.coupons.couponsystem.service;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
+import com.coupons.couponsystem.model.User;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface AdminService {
 
 //    public boolean logIn(String email,String password) throws CouponSystemException;
 
-    Company addCompany(Company company) throws CouponSystemException;
+    Company addCompany(User user,Company company) throws CouponSystemException;
 
-    Company updateCompany(Company company) throws CouponSystemException;
+    Company updateCompany(User user,Company company) throws CouponSystemException;
 
     void deleteCompany(long id) throws CouponSystemException;
 
@@ -23,9 +24,9 @@ public interface AdminService {
 
     Company getOneCompany(long id) throws CouponSystemException;
 
-    Customer addCustomer(Customer customer) throws CouponSystemException;
+    Customer addCustomer(User user,Customer customer) throws CouponSystemException;
 
-    Customer updateCustomer(Customer customer) throws CouponSystemException;
+    Customer updateCustomer(User user,Customer customer) throws CouponSystemException;
 
     void deleteCustomer(long id) throws CouponSystemException;
 

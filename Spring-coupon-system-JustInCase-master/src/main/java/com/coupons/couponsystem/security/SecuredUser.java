@@ -29,12 +29,12 @@ public class SecuredUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return user.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassWord();
+        return user.getPassword();
     }
 
     @Override

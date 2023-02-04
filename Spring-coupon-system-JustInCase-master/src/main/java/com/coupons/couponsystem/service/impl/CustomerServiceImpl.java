@@ -2,9 +2,7 @@ package com.coupons.couponsystem.service.impl;
 
 import com.coupons.couponsystem.CouponSystemApplication;
 import com.coupons.couponsystem.exception.CouponSystemException;
-import com.coupons.couponsystem.model.Category;
-import com.coupons.couponsystem.model.Coupon;
-import com.coupons.couponsystem.model.Customer;
+import com.coupons.couponsystem.model.*;
 import com.coupons.couponsystem.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +31,13 @@ public class CustomerServiceImpl extends ClientFacade  implements CustomerServic
     @Override
     public  boolean logIn(String email,String password) throws CouponSystemException {
 
-        Customer customer=   customerRepository.findByEmailAndPassword(email,password)
+        User customerUser=   userRepository.findByUsername(email)
                 .orElseThrow(() -> new CouponSystemException("customer not found logIn customerService ",HttpStatus.NOT_FOUND));
 
-        if(customerRepository.existsByEmail(email)
-                && customerRepository.existsByPassword(password)){
+        if(customerUser.getPassword().equals(password)){
+            Customer customer = customerRepository.findByUserId(customerUser.getId())
+                    .orElseThrow(() -> new CouponSystemException("customer not found logIn customerService ",HttpStatus.NOT_FOUND));
+
             customerId = customer.getId();
 
             return true;

@@ -2,9 +2,9 @@ package com.coupons.couponsystem.service.impl;
 
 import com.coupons.couponsystem.ClientLogIn.ClientType;
 import com.coupons.couponsystem.exception.CouponSystemException;
-import com.coupons.couponsystem.model.Admin;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
+import com.coupons.couponsystem.model.User;
 import com.coupons.couponsystem.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,9 +29,13 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
     @Override
     public boolean logIn(String email,String password) throws CouponSystemException {
 
-        Admin admin=   adminRepository.findByEmailAndPassword(email,password)
+        User user=   userRepository.findByUsername(email)
                 .orElseThrow(() -> new CouponSystemException("Admin not found ",HttpStatus.BAD_REQUEST));
-        return true;
+        if(user.getPassword().equals(password)){
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -40,16 +44,23 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      * @throws CouponSystemException if the entity doesn't exist
      */
     @Override
-    public Company addCompany(Company company) throws CouponSystemException {
-        if(!companyRepository.existsByEmail(company.getEmail())
-            && !customerRepository.existsByEmail(company.getEmail()))
+    public Company addCompany(User user,Company company) throws CouponSystemException {
+        if(!userRepository.existsByUsername(user.getUsername()))
          {
-            if (!companyRepository.existsByPassword(company.getPassword())) {
-                company.setClientRole(ClientType.Company);
+
+
+             //unique company name
+            if (!companyRepository.existsByName(company.getName())) {
+
+                user.setClientRole(ClientType.Company);
+
                 Company newCompany = companyRepository.save(company);
+                newCompany.setUser(user);
+                userRepository.save(user);
+
                 return newCompany;
             }
-            throw new CouponSystemException("addCompany error password exists already",HttpStatus.BAD_REQUEST);
+            throw new CouponSystemException("addCompany error company name exists already",HttpStatus.BAD_REQUEST);
 
         }
 
@@ -60,45 +71,39 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
 
     /**
      * checks if the email is unique or the same and mapping the new updated record accordingly
+     * we can't change the name so no option for that
      * @param company
      * @return  Company
      * @throws CouponSystemException company not found
      */
+
+    //     find by id of and change the username
         @Override
-        public Company updateCompany(Company company) throws CouponSystemException {
-            System.out.println(company);
+        public Company updateCompany( User user,Company company) throws CouponSystemException {
+
+
+                User userRecord = userRepository.findById(user.getId())
+                        .orElseThrow(()-> new CouponSystemException("user company not found updateCompany", HttpStatus.NOT_FOUND));
 
                 Company companyRecord = companyRepository.findById(company.getId())
                         .orElseThrow(() -> new CouponSystemException("company not found updateCompany", HttpStatus.NOT_FOUND));
 
-                if (company.getEmail().equals(companyRecord.getEmail())) {
-                    return  companyRepository.findById(company.getId()).map(companyEntity -> {
 
-                                companyEntity.setEmail(company.getEmail());
+                if (user.getUsername().equals(userRecord.getUsername())) {
+                    userRecord.setPassword(user.getPassword());
+                    companyRecord.setUser(userRecord);
+                    return companyRecord;
 
-                                companyEntity.setPassword(company.getPassword());
-
-                                return companyEntity;
-                            }
-                    ).orElseThrow(() -> new CouponSystemException("company not found updateCompany", HttpStatus.NOT_FOUND));
                 }
 
-                if(companyRepository.existsByEmail(company.getEmail())
-                ||adminRepository.existsByEmail(company.getEmail())
-                ||customerRepository.existsByEmail(company.getEmail())){
+                if(userRepository.existsByUsername(user.getUsername())){
                     throw new CouponSystemException("can't update - email is in use - updateCompany", HttpStatus.BAD_REQUEST);
                 }
 
-            return  companyRepository.findById(company.getId()).map(companyEntity -> {
-
-                        companyEntity.setEmail(company.getEmail());
-
-                        companyEntity.setPassword(company.getPassword());
-
-                        return companyEntity;
-                    }
-            ).orElseThrow(() -> new CouponSystemException("company not found updateCompany", HttpStatus.NOT_FOUND));
-
+                userRecord.setPassword(user.getPassword());
+                userRecord.setUsername(user.getUsername());
+                companyRecord.setUser(userRecord);
+                return companyRecord;
             }
 
 
@@ -143,15 +148,17 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      * @throws CouponSystemException Email exists already
      */
     @Override
-    public Customer addCustomer(Customer customer) throws CouponSystemException {
-        if(customerRepository.existsByEmail(customer.getEmail())
-                ||companyRepository.existsByEmail(customer.getEmail())
-                ||adminRepository.existsByEmail(customer.getEmail()))
+    public Customer addCustomer(User user, Customer customer) throws CouponSystemException {
+        if(userRepository.existsByUsername(user.getUsername()))
         {
             throw new CouponSystemException("Email exists already addCustomer at adminService",HttpStatus.BAD_REQUEST);
         }
-        //optional
-        customer.setClientRole(ClientType.Customer);
+
+        Customer newCustomer = customerRepository.save(customer);
+        newCustomer.setUser(user);
+        userRepository.save(user);
+
+
         return customerRepository.save(customer);
     }
 
@@ -162,41 +169,39 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      * @throws CouponSystemException Customer not found
      */
     @Override
-    public Customer updateCustomer(Customer customer) throws CouponSystemException {
+    public Customer updateCustomer(User user,Customer customer) throws CouponSystemException {
 
         Customer customerRecord = customerRepository.findById(customer.getId()).orElseThrow(()
                 -> new CouponSystemException("Customer not found updateCustomer at admin service ",HttpStatus.NOT_FOUND));
+        User userRecord = userRepository.findById(user.getId()).orElseThrow(()
+                -> new CouponSystemException("user not found updateCustomer at admin service ",HttpStatus.NOT_FOUND));
 
-        if(customer.getEmail().equals(customerRecord.getEmail())){
-            return customerRepository.findById(customer.getId()).map(customerEntity -> {
-                        customerEntity.setFirstName(customer.getFirstName());
-                        customerEntity.setLastName(customer.getLastName());
-                        customerEntity.setEmail(customer.getEmail());
-                        customerEntity.setPassword(customer.getPassword());
+        if(customerRecord.getUser().getUsername().equals(user.getUsername())){
 
-                        return customerEntity;
-                    }
-            ).orElseThrow(()
-                    -> new CouponSystemException("Customer not found updateCustomer at admin service ",HttpStatus.NOT_FOUND));
+            userRecord.setPassword(user.getPassword());
+
+            customerRecord.setFirstName(customer.getFirstName());
+            customerRecord.setLastName(customer.getLastName());
+            customerRecord.setUser(userRecord);
+
+
+             return customerRecord;
+
         }
 
-        if(customerRepository.existsByEmail(customer.getEmail())
-        || adminRepository.existsByEmail(customer.getEmail())
-        ||companyRepository.existsByEmail(customer.getEmail())){
+        if(userRepository.existsByUsername(user.getUsername())){
             throw new CouponSystemException("can't update - email is in use - updateCustomer", HttpStatus.BAD_REQUEST);
         }
 
-        return customerRepository.findById(customer.getId()).map(customerEntity -> {
-                    customerEntity.setFirstName(customer.getFirstName());
-                    customerEntity.setLastName(customer.getLastName());
-                    customerEntity.setEmail(customer.getEmail());
-                    customerEntity.setPassword(customer.getPassword());
+        userRecord.setPassword(user.getPassword());
+        userRecord.setUsername(user.getUsername());
 
-                    return customerEntity;
-                }
-        ).orElseThrow(()
-                -> new CouponSystemException("Customer not found updateCustomer at admin service ",HttpStatus.NOT_FOUND));
+        customerRecord.setFirstName(customer.getFirstName());
+        customerRecord.setLastName(customer.getLastName());
+        customerRecord.setUser(userRecord);
 
+
+        return customerRecord;
 
 
     }

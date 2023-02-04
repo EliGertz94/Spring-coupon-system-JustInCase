@@ -7,21 +7,13 @@ import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
-    boolean existsByEmail(String email);
-
-    Customer findByEmail(String email);
-    boolean existsByPassword(String password);
-
-   // List<Customer> findAllByCoupon_id(long coupon_id);
-
-   Optional<Customer> findByEmailAndPassword(String email, String password);
 
 
 
-//    @Query(value = "select * from coupons  where coupons.id  in " +
-//            "(select coupon_id from CUSTOMERS_VS_COUPONS where customer_id = customerId )"
-//            , nativeQuery = true)
-//    ArrayList<Coupon> findAllCustomerCoupons(long customerId);
+   Optional<Customer> findByUserId(Long userId);
+
+//    List<Customer> findAllByCoupon_id(long coupon_id);
 //
+
 
 }

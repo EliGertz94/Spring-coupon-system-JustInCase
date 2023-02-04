@@ -1,9 +1,6 @@
 package com.coupons.couponsystem.service.impl;
 
-import com.coupons.couponsystem.Repositoty.AdminRepository;
-import com.coupons.couponsystem.Repositoty.CompanyRepository;
-import com.coupons.couponsystem.Repositoty.CouponRepository;
-import com.coupons.couponsystem.Repositoty.CustomerRepository;
+import com.coupons.couponsystem.Repositoty.*;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +15,8 @@ public abstract class ClientFacade {
 
         @Autowired
         protected AdminRepository adminRepository;
-
-
+        @Autowired
+        protected UserRepository userRepository;
 
    public abstract boolean logIn(String email, String password) throws CouponSystemException;
 }

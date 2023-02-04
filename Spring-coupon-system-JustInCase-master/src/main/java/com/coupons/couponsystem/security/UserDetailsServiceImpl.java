@@ -4,7 +4,7 @@ import com.coupons.couponsystem.ClientLogIn.ClientType;
 import com.coupons.couponsystem.Repositoty.AdminRepository;
 import com.coupons.couponsystem.Repositoty.CompanyRepository;
 import com.coupons.couponsystem.Repositoty.CustomerRepository;
-import com.coupons.couponsystem.model.Admin;
+import com.coupons.couponsystem.Repositoty.UserRepository;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
 import com.coupons.couponsystem.model.User;
@@ -27,51 +27,34 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private AdminRepository adminRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        System.out.println(email);
-        Admin admin = adminRepository.findByEmail(email);
-        System.out.println(admin);
 
-        if(admin!=null) {
-            User user = new User();
-            user.setUserName(admin.getEmail());
-            user.setPassWord(admin.getPassword());
-            user.setClientRole(ClientType.Administrator);
-            System.out.println(" user logged in "+ user.getClientRole());
+        User user =  userRepository.findByUsername(email)
+                .orElseThrow(()-> new UsernameNotFoundException("No user with such username in loaduserbyusername"));
 
-
+        if(user.getClientRole().equals(ClientType.Administrator))
+        {
             return new SecuredUser(user);
         }
-
-        Company company = companyRepository.findByEmail(email);
-        System.out.println(company);
-
-        if(company!=null) {
-            User user = new User();
-            user.setUserName(company.getEmail());
-            user.setPassWord(company.getPassword());
-            user.setClientRole(ClientType.Company);
-            System.out.println(user);
-            System.out.println(" user logged in "+ user.getClientRole());
-
+        if(user.getClientRole().equals(ClientType.Company))
+        {
+            Company company =  companyRepository.findByUserId(user.getId())
+                    .orElseThrow(()-> new UsernameNotFoundException("No company user with such username in loaduserbyusername"));
 
             return new SecuredUser(user,company.getId());
         }
-        Customer customer = customerRepository.findByEmail(email);
-        System.out.println(customer);
-        if(customer!=null) {
-            User user = new User();
-            user.setUserName(customer.getEmail());
-            user.setPassWord(customer.getPassword());
-            user.setClientRole(ClientType.Customer);
-
-            System.out.println(" user logged in "+ user.getClientRole());
+        if(user.getClientRole().equals(ClientType.Customer))
+        {
+            Customer customer =  customerRepository.findByUserId(user.getId())
+                    .orElseThrow(()-> new UsernameNotFoundException("No customer user with such username in loaduserbyusername"));
 
             return new SecuredUser(user,customer.getId());
         }
-
 
 
         throw new UsernameNotFoundException("wrong credentials loadUser");

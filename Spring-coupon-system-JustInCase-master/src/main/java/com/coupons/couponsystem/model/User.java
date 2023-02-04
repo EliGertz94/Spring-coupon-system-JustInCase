@@ -2,24 +2,30 @@ package com.coupons.couponsystem.model;
 
 import com.coupons.couponsystem.ClientLogIn.ClientType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
 @Getter
 @Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "user")
+
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String userName;
-    private String passWord;
+    private long Id;
+
+    private String username;
+    private String password;
     @Column(name = "client_Role")
     @Enumerated(EnumType.STRING)
     private ClientType clientRole;
+
+
 
 //    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 //    private Customer customer;

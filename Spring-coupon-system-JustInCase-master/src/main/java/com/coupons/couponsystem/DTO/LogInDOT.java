@@ -1,4 +1,4 @@
-package com.coupons.couponsystem.DOT;
+package com.coupons.couponsystem.DTO;
 
 import lombok.Builder;
 import lombok.Data;

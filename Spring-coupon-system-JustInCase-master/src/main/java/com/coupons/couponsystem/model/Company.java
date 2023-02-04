@@ -1,7 +1,6 @@
 package com.coupons.couponsystem.model;
 
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,8 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-
-
 @Table(name = "company")
 public class Company {
 
@@ -26,28 +23,31 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String email;
-    private String password;
+//    private String email;
+//    private String password;
 
 
-    @Column(name = "client_Role")
-    @Enumerated(EnumType.STRING)
-    private  ClientType clientRole;
+//    @Column(name = "client_Role")
+//    @Enumerated(EnumType.STRING)
+//    private  ClientType clientRole;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId")
+    private User user;
 
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "company",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Coupon> coupons ;
 
-    public Company(Long id, String name, String email, String password, List<Coupon> coupons) {
+    public Company(Long id, String name,  List<Coupon> coupons) {
         this.id = id;
         this.name = name;
-        this.email = email;
-        this.password = password;
+
+//
+//        this.email = email;
+//
+//        this.password = password;
 
 
         if(coupons!=null){
