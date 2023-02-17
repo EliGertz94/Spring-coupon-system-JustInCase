@@ -1,4 +1,4 @@
-package com.coupons.couponsystem.ClientLogIn;
+package com.coupons.couponsystem.clientLogIn;
 
 public enum ClientType {
     Administrator,

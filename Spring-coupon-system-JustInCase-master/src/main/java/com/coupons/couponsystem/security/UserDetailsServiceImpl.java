@@ -1,10 +1,10 @@
 package com.coupons.couponsystem.security;
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
-import com.coupons.couponsystem.Repositoty.AdminRepository;
-import com.coupons.couponsystem.Repositoty.CompanyRepository;
-import com.coupons.couponsystem.Repositoty.CustomerRepository;
-import com.coupons.couponsystem.Repositoty.UserRepository;
+import com.coupons.couponsystem.clientLogIn.ClientType;
+import com.coupons.couponsystem.repositoty.AdminRepository;
+import com.coupons.couponsystem.repositoty.CompanyRepository;
+import com.coupons.couponsystem.repositoty.CustomerRepository;
+import com.coupons.couponsystem.repositoty.UserRepository;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
 import com.coupons.couponsystem.model.User;

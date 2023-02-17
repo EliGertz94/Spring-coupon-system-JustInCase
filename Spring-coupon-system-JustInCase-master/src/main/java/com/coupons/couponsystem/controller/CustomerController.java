@@ -1,10 +1,10 @@
 package com.coupons.couponsystem.controller;
 
 
+import com.coupons.couponsystem.dto.CouponIdsDTO;
 import com.coupons.couponsystem.exception.CouponSystemException;
-import com.coupons.couponsystem.model.Category;
-import com.coupons.couponsystem.model.Coupon;
 import com.coupons.couponsystem.model.Customer;
+import com.coupons.couponsystem.model.Purchase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,32 +21,39 @@ public class CustomerController extends ClientController {
 
     Logger logger= LoggerFactory.getLogger(CompanyController.class);
 
-    @PostMapping("/coupon/{couponId}")
-    public ResponseEntity<String> purchaseCoupon(@PathVariable long couponId){
+    @PostMapping("/purchase/")
+    public ResponseEntity<String> purchaseCoupon(@RequestBody CouponIdsDTO purchaseIds){
         try {
+            return new ResponseEntity<>(customerService.makePurchase(purchaseIds.getIds()), HttpStatus.OK);
 
-            customerService.purchaseCoupon(couponId);
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
 
         }
-        return new ResponseEntity<>("coupon id "+couponId+ "  was purchased ", HttpStatus.OK);
     }
 
-    @GetMapping("/coupons/")
-    public ResponseEntity<List<Coupon>> getCustomerCoupons(Authentication authentication){
-        return new ResponseEntity<>(customerService.getCustomerCoupons(),HttpStatus.OK);
+    @GetMapping("/purchases/")
+    public ResponseEntity<List<Purchase>> getCustomerPurchases(Authentication authentication){
+    try    {
+            return new ResponseEntity<>(customerService.getCustomerPurchases(), HttpStatus.OK);
+    } catch (CouponSystemException e) {
+        throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
+    }
     }
 
-    @GetMapping("/coupons/category/{category}")
-    public ResponseEntity<List<Coupon>> getCustomerCoupons(@PathVariable Category category){
-        return new ResponseEntity<>(customerService.getCustomerCoupons(category),HttpStatus.OK);
-    }
+//    @GetMapping("/coupons/category/{category}")
+//    public ResponseEntity<List<Purchase>> getCustomerCoupons(@PathVariable Category category){
+//        return new ResponseEntity<>(customerService.getCustomerPurchases(category),HttpStatus.OK);
+//    }
 
-    @GetMapping("/coupons/price/{maxPrice}")
-    public ResponseEntity<List<Coupon>> getCustomerCoupons(@PathVariable double maxPrice){
+    @GetMapping("/purchases/price/{maxPrice}")
+    public ResponseEntity<List<Purchase>> getCustomerPurchases(@PathVariable double maxPrice){
 
-        return new ResponseEntity<>(customerService.getCustomerCoupons(maxPrice),HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(customerService.getCustomerPurchases(maxPrice),HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
+        }
     }
 
     @GetMapping("/details")

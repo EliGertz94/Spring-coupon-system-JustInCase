@@ -1,6 +1,6 @@
 package com.coupons.couponsystem;
 
-import com.coupons.couponsystem.ClientLogIn.LoginManager;
+import com.coupons.couponsystem.clientLogIn.LoginManager;
 import com.coupons.couponsystem.model.Coupon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

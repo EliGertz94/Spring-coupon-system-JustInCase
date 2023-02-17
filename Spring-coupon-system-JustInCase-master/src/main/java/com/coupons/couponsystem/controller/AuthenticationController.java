@@ -1,7 +1,8 @@
 package com.coupons.couponsystem.controller;
 
-import com.coupons.couponsystem.DTO.LogInDOT;
-import com.coupons.couponsystem.DTO.ResponseDTO;
+import com.coupons.couponsystem.clientLogIn.ClientType;
+import com.coupons.couponsystem.dto.LogInDOT;
+import com.coupons.couponsystem.dto.ResponseDTO;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.security.SecuredUser;
 import com.coupons.couponsystem.security.UserDetailsServiceImpl;
@@ -26,13 +27,25 @@ public class AuthenticationController extends ClientController {
     private UserDetailsServiceImpl userDetailsService;
 
 
-    @PostMapping("/login-admin")
-    public ResponseEntity<ResponseDTO> logInAdmin(@RequestBody  LogInDOT logInDOT) {
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDTO> login(@RequestBody  LogInDOT logInDOT) {
     try{
-        System.out.println(logInDOT.getUsername()+
-                logInDOT.getPassword());
-        System.out.println("admin login ");
 
+
+        if(logInDOT.getClientRole().equals(ClientType.Administrator)) {
+            if(!adminService.logIn(logInDOT.getUsername(), logInDOT.getPassword(),logInDOT.getClientRole())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"wrong credentials ");
+            }
+        } else if (logInDOT.getClientRole().equals(ClientType.Company)) {
+            if(!companyService.logIn(logInDOT.getUsername(), logInDOT.getPassword(),logInDOT.getClientRole())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"wrong credentials ");
+            }
+        } else if (logInDOT.getClientRole().equals(ClientType.Customer)) {
+            if(!customerService.logIn(logInDOT.getUsername(), logInDOT.getPassword(),logInDOT.getClientRole())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"wrong credentials ");
+
+            }
+        }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         logInDOT.getUsername(),
@@ -41,18 +54,17 @@ public class AuthenticationController extends ClientController {
         SecuredUser user = (SecuredUser) userDetailsService.loadUserByUsername(logInDOT.getUsername());
 
         String token= tokenProvider.generateToken(user);
-
         GrantedAuthority grantedAuth = user.getAuthorities().stream().toList().get(0);
 
-        adminService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
 
         return new ResponseEntity<>(new ResponseDTO(token,grantedAuth),HttpStatus.OK);
 
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
-        }catch (AuthenticationException e){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
         }
+//    catch (AuthenticationException e){
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,e.getMessage());
+//        }
     }
 
     @PostMapping("/login-company")
@@ -70,7 +82,7 @@ public class AuthenticationController extends ClientController {
 
         String token= tokenProvider.generateToken(user);
 
-        companyService.logIn(logInDOT.getUsername(), logInDOT.getPassword());
+        companyService.logIn(logInDOT.getUsername(), logInDOT.getPassword(),logInDOT.getClientRole());
 
         GrantedAuthority grantedAuth = user.getAuthorities().stream().toList().get(0);
 
@@ -99,7 +111,7 @@ public class AuthenticationController extends ClientController {
             SecuredUser user = (SecuredUser) userDetailsService.loadUserByUsername(logInDOT.getUsername());
 
             String token= tokenProvider.generateToken(user);
-            customerService.logIn(logInDOT.getUsername(),logInDOT.getPassword());
+            customerService.logIn(logInDOT.getUsername(),logInDOT.getPassword(),logInDOT.getClientRole());
             GrantedAuthority grantedAuth = user.getAuthorities().stream().toList().get(0);
 
              return new ResponseEntity<>(new ResponseDTO(token,grantedAuth),HttpStatus.OK);

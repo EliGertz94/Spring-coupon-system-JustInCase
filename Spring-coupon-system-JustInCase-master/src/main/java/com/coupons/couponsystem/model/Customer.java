@@ -1,12 +1,12 @@
 package com.coupons.couponsystem.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -19,25 +19,22 @@ public class Customer {
     private long id;
     private String firstName;
     private String lastName;
-//    private String email;
-//    private String password;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userName")
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.DETACH)
-    @JoinTable(name = "customer_coupons",
-            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "coupon_id" ,referencedColumnName = "id"))
-    @ToString.Exclude
-    private List<Coupon> coupons;
 
-    public Customer(long id, String firstName, String lastName, List<Coupon> coupons) {
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Purchase> purchases;
+
+    public Customer(long id, String firstName, String lastName, List<Purchase> purchases) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.coupons = coupons;
+        this.purchases = purchases;
     }
 }

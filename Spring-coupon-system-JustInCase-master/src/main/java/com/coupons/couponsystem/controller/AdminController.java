@@ -1,10 +1,11 @@
 package com.coupons.couponsystem.controller;
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
-import com.coupons.couponsystem.DTO.CompanyDTO;
-import com.coupons.couponsystem.DTO.CustomerDTO;
+import com.coupons.couponsystem.clientLogIn.ClientType;
+import com.coupons.couponsystem.dto.CompanyDTO;
+import com.coupons.couponsystem.dto.CustomerDTO;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Company;
+import com.coupons.couponsystem.model.Coupon;
 import com.coupons.couponsystem.model.Customer;
 import com.coupons.couponsystem.model.User;
 import org.springframework.http.HttpStatus;
@@ -22,14 +23,30 @@ public class AdminController extends ClientController {
 
 
     @PostMapping("add-company")
-        public ResponseEntity<Company> addCompany(@RequestBody CompanyDTO company){
+        public ResponseEntity<Company> addCompany(@RequestBody CompanyDTO companyDTO){
         try {
 
-            return new ResponseEntity<>(adminService.addCompany(new User(company.getId(),company.getUsername(),company.getPassword(), ClientType.Company),
-                    new Company(company.getId(), company.getName(),company.getCoupons())), HttpStatus.OK);
+            for (Coupon coupon:
+                    companyDTO.getCoupons()) {
+                System.out.println(coupon);
+            }
+            User user = User.builder()
+                    .id(0)
+                    .password(companyDTO.getPassword())
+                    .username(companyDTO.getUsername())
+                    .clientRole(ClientType.Company)
+                    .build();
+
+            Company company = Company.builder()
+                    .id(0L)
+                    .name(companyDTO.getName())
+                    .coupons(companyDTO.getCoupons())
+                    .build();
+
+
+            return new ResponseEntity<>(adminService.addCompany(user, company), HttpStatus.OK);
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
-
         }
     }
 
@@ -75,7 +92,7 @@ public class AdminController extends ClientController {
         try {
             return  new ResponseEntity<>(adminService.addCustomer(
                     new User(customerDTO.getId(), customerDTO.getUsername(), customerDTO.getPassword(),ClientType.Customer)
-                    ,new Customer(customerDTO.getCustomerId(),customerDTO.getFirstName(), customerDTO.getLastName(), customerDTO.getCoupons())),HttpStatus.OK);
+                    ,new Customer(customerDTO.getCustomerId(),customerDTO.getFirstName(), customerDTO.getLastName(), customerDTO.getPurchases())),HttpStatus.OK);
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
 
@@ -87,7 +104,7 @@ public class AdminController extends ClientController {
         try {
             return new ResponseEntity<>(adminService.updateCustomer(
              new User(customerDTO.getId(), customerDTO.getUsername(), customerDTO.getPassword(),ClientType.Customer)
-            ,new Customer(customerDTO.getCustomerId(),customerDTO.getFirstName(), customerDTO.getLastName(), customerDTO.getCoupons())),HttpStatus.OK);
+            ,new Customer(customerDTO.getCustomerId(),customerDTO.getFirstName(), customerDTO.getLastName(), customerDTO.getPurchases())),HttpStatus.OK);
         } catch (CouponSystemException e) {
             throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
 

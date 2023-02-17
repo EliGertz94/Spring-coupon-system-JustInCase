@@ -1,10 +1,8 @@
 package com.coupons.couponsystem.service.impl;
 
+import com.coupons.couponsystem.clientLogIn.ClientType;
 import com.coupons.couponsystem.exception.CouponSystemException;
-import com.coupons.couponsystem.model.Category;
-import com.coupons.couponsystem.model.Company;
-import com.coupons.couponsystem.model.Coupon;
-import com.coupons.couponsystem.model.User;
+import com.coupons.couponsystem.model.*;
 import com.coupons.couponsystem.security.SecuredUser;
 import com.coupons.couponsystem.service.CompanyService;
 import org.slf4j.Logger;
@@ -15,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 @Transactional
@@ -42,11 +41,12 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
      * @throws CouponSystemException company not found
      */
     @Override
-    public boolean logIn(String email, String password) throws CouponSystemException {
+    public boolean logIn(String email, String password, ClientType clientRole) throws CouponSystemException {
 
         User user =userRepository.findByUsername(email)
                 .orElseThrow(() -> new CouponSystemException("user company not found at logIn companyService",HttpStatus.NOT_FOUND));
-        if(user.getPassword().equals(password)){
+        if(user.getPassword().equals(password)
+        && user.getClientRole().equals(clientRole)){
             Company company = companyRepository.findByUserId(user.getId())
                     .orElseThrow(() -> new CouponSystemException("company not found by user at logIn companyService", HttpStatus.NOT_FOUND));
 
@@ -76,6 +76,7 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
             throw new CouponSystemException("title already exits -  at add coupon at companyService",HttpStatus.BAD_REQUEST);
         }
         coupon.setCompany(company);
+        coupon.setBuyable(true);
 
         return  couponRepository.save(coupon);
     }
@@ -174,6 +175,22 @@ public class CompanyServiceImpl extends ClientFacade  implements CompanyService 
                .orElseThrow(() -> new CouponSystemException("company not found at getCompanyDetails CompanyService",HttpStatus.NOT_FOUND ));
 
 
+    }
+
+    public double getRevenueByTimeFrame(LocalDateTime start, LocalDateTime end) throws CouponSystemException {
+
+        double totalRevenue= 0;
+
+        List<Purchase> purchases = purchaseRepository.findAllByPurchaseDateBetween(start,end)
+                .orElseThrow(() -> new CouponSystemException("purchases not found by between dates ",HttpStatus.NOT_FOUND ));
+
+
+        for (Purchase purchase:
+             purchases) {
+            totalRevenue+= purchase.getTotalPrice();
+        }
+
+        return totalRevenue;
     }
 
     public long getCompanyId() {

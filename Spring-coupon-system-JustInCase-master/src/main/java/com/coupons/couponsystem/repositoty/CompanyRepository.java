@@ -1,4 +1,4 @@
-package com.coupons.couponsystem.Repositoty;
+package com.coupons.couponsystem.repositoty;
 
 import com.coupons.couponsystem.model.Company;
 import org.springframework.data.jpa.repository.JpaRepository;

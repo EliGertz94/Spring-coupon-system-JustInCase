@@ -1,6 +1,6 @@
 package com.coupons.couponsystem.service.impl;
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
+import com.coupons.couponsystem.clientLogIn.ClientType;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Customer;
@@ -27,11 +27,12 @@ public class AdminServiceImpl extends  ClientFacade implements AdminService {
      */
 
     @Override
-    public boolean logIn(String email,String password) throws CouponSystemException {
+    public boolean logIn(String email,String password,ClientType clientRole) throws CouponSystemException {
 
         User user=   userRepository.findByUsername(email)
                 .orElseThrow(() -> new CouponSystemException("Admin not found ",HttpStatus.BAD_REQUEST));
-        if(user.getPassword().equals(password)){
+        if(user.getPassword().equals(password) &&
+        user.getClientRole().equals(clientRole)){
             return true;
         }
 

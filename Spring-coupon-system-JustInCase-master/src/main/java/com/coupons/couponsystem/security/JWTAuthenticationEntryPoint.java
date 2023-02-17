@@ -16,7 +16,7 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json");
         response.setStatus(response.getStatus());
         response.getOutputStream().println(
-                "{ \"error\": \"" + authException.getMessage() + "\" }");
+                "{ \"error\": \"" +response.getStatus()+" "+ authException.getMessage() + "\" }");
 
     }
 

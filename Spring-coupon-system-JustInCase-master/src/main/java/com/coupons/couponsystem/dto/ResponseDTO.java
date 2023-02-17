@@ -1,4 +1,4 @@
-package com.coupons.couponsystem.DTO;
+package com.coupons.couponsystem.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.coupons.couponsystem.model;
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
+import com.coupons.couponsystem.clientLogIn.ClientType;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

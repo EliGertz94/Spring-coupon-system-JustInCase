@@ -1,5 +1,6 @@
 package com.coupons.couponsystem.controller;
 
+import com.coupons.couponsystem.dto.TimeframeDTO;
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.model.Category;
 import com.coupons.couponsystem.model.Coupon;
@@ -66,5 +67,16 @@ public class CompanyController  extends ClientController{
         System.out.println(maxPrice);
         return new ResponseEntity<>(companyService.getAllCompanyCouponsByPrice(maxPrice) ,HttpStatus.OK);
     }
+
+
+    @GetMapping("/revenue")
+    public ResponseEntity<Double> getRevenueByTimeFrame(@RequestBody TimeframeDTO timeframe){
+        try {
+            return new ResponseEntity<>(companyService.getRevenueByTimeFrame(timeframe.getStart(),timeframe.getEnd()),HttpStatus.OK);
+        } catch (CouponSystemException e) {
+            throw new ResponseStatusException(e.getHttpStatus(),e.getMessage());
+        }
+    }
+
 
 }

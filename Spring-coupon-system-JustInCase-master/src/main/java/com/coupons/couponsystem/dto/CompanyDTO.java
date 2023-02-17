@@ -1,9 +1,11 @@
-package com.coupons.couponsystem.DTO;
+package com.coupons.couponsystem.dto;
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
+import com.coupons.couponsystem.clientLogIn.ClientType;
 import com.coupons.couponsystem.model.Company;
 import com.coupons.couponsystem.model.Coupon;
 import com.coupons.couponsystem.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CompanyDTO {
 
 
@@ -36,4 +40,8 @@ public class CompanyDTO {
                 this.coupons=company.getCoupons();
 
         }
+
+
+
+
 }

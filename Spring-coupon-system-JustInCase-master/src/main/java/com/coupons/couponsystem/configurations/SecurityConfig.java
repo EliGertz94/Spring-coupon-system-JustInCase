@@ -43,6 +43,7 @@ public class SecurityConfig {
       http.authorizeHttpRequests()
               .requestMatchers("/api/authentication/**").permitAll()
               .requestMatchers("/api/authentication/**").permitAll()
+              .requestMatchers("/api/paypal/**").permitAll()
               .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
               .requestMatchers("/api/admin/**").hasAuthority("Administrator")
               .requestMatchers("/api/company/**").hasAuthority("Company")

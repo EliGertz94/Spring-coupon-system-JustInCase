@@ -1,6 +1,6 @@
 package com.coupons.couponsystem.security;
 
-import com.coupons.couponsystem.ClientLogIn.ClientType;
+import com.coupons.couponsystem.clientLogIn.ClientType;
 import com.coupons.couponsystem.service.impl.CompanyServiceImpl;
 import com.coupons.couponsystem.service.impl.CustomerServiceImpl;
 import jakarta.servlet.FilterChain;

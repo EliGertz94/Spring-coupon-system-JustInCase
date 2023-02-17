@@ -39,13 +39,23 @@ public class Coupon {
     private boolean buyable;
 
     //get rid of the cascaden
+//    @ManyToMany(fetch = FetchType.EAGER,
+//            cascade = CascadeType.DETACH)
+//    @JoinTable(name = "customer_coupons",
+//            joinColumns = @JoinColumn(name = "coupon_id" ,referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"))
+//    @ToString.Exclude
+//    @JsonIgnore
+//    private List<Customer> customers;
+
+
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH)
-    @JoinTable(name = "customer_coupons",
+    @JoinTable(name = "purchases_coupons",
             joinColumns = @JoinColumn(name = "coupon_id" ,referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "purchases_id", referencedColumnName = "id"))
     @ToString.Exclude
     @JsonIgnore
-    private List<Customer> customers;
+    private List<Purchase> purchases;
 
 }

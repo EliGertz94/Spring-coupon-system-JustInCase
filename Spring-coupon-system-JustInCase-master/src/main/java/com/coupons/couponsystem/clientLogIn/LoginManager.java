@@ -1,4 +1,4 @@
-package com.coupons.couponsystem.ClientLogIn;
+package com.coupons.couponsystem.clientLogIn;
 
 import com.coupons.couponsystem.exception.CouponSystemException;
 import com.coupons.couponsystem.service.impl.AdminServiceImpl;
@@ -25,21 +25,18 @@ public class LoginManager {
         CustomerServiceImpl customerService;
 
 
-
-
-
     public ClientFacade logIn(String email, String password, ClientType clientType) throws CouponSystemException {
 
             switch (clientType) {
                 case Administrator:
-                    if(adminService.logIn(email,password)){
+                    if(adminService.logIn(email,password,clientType)){
                         return adminService;
                     }
 
                     break;
                 case Company:
 
-                    if(companyService.logIn(email,password))
+                    if(companyService.logIn(email,password,clientType))
                     {
                     return companyService;
 
@@ -47,7 +44,7 @@ public class LoginManager {
 
                 break;
             case Customer:
-                if(customerService.logIn(email,password)){
+                if(customerService.logIn(email,password,clientType)){
                     return customerService;
                 }
                 break;

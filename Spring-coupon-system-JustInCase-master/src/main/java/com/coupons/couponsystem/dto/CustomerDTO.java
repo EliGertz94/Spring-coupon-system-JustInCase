@@ -1,16 +1,17 @@
-package com.coupons.couponsystem.DTO;
+package com.coupons.couponsystem.dto;
 
-import com.coupons.couponsystem.model.Coupon;
+import com.coupons.couponsystem.model.Purchase;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
+@Builder
 public class CustomerDTO {
-
-
         private Long id;
 
         private Long customerId;
@@ -21,15 +22,19 @@ public class CustomerDTO {
         private String password;
 
 
-        private List<Coupon> coupons ;
+        private List<Purchase> purchases ;
 
-        public CustomerDTO(Long id, Long customerId, String firstName, String lastName, String username, String password, List<Coupon> coupons) {
+        public CustomerDTO(Long id, Long customerId, String firstName, String lastName, String username, String password, List<Purchase> purchases) {
                 this.id = id;
                 this.customerId = customerId;
                 this.firstName = firstName;
                 this.lastName = lastName;
                 this.username = username;
                 this.password = password;
-                this.coupons = coupons;
+                if(purchases== null){
+                       purchases= new ArrayList<>();
+                }else{
+                        this.purchases = purchases;
+                }
         }
 }
